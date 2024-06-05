@@ -9,10 +9,10 @@ import XCTest
 
 final class CollectionTests: XCTestCase {
 
-    func testExample() throws {
+    func test() throws {
       let a = [1, 2, 3, 4, 5]
       let b = a.first(where: { $0 > 3})
-      let c = a.first { $0 > 3}
+      let _ = a.first { $0 > 3}
       XCTAssertEqual(b, 4)
       XCTAssertEqual(b, 4)
     }

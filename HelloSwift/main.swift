@@ -6,7 +6,3 @@
 //
 
 import Foundation
-
-print("Hello, World!")
-
-benchmarkClassVsStruct()
