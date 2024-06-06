@@ -32,6 +32,8 @@
 		000A61ED2A9AAF2700EEA7A0 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		000A61F82A9AAF5300EEA7A0 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		000A61FA2A9AAF5300EEA7A0 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		001492072C11F6350004C657 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		001492082C11F6350004C657 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		004F21CF2C104944003BC2D4 /* TaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTests.swift; sourceTree = "<group>"; };
 		00BCE2252BBF1A39002117A8 /* ClassVsStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassVsStruct.swift; sourceTree = "<group>"; };
 		00F402C32BC1155D00AFAF44 /* StructTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructTests.swift; sourceTree = "<group>"; };
@@ -59,6 +61,8 @@
 		000A61E12A9AAF2700EEA7A0 = {
 			isa = PBXGroup;
 			children = (
+				001492072C11F6350004C657 /* LICENSE */,
+				001492082C11F6350004C657 /* README.md */,
 				000A61EC2A9AAF2700EEA7A0 /* HelloSwift */,
 				000A61F92A9AAF5300EEA7A0 /* Tests */,
 				000A61EB2A9AAF2700EEA7A0 /* Products */,
