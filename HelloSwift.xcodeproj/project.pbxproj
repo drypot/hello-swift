@@ -23,6 +23,7 @@
 		001926442C9C13F500076AC2 /* HelloSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelloSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		006BC3A62CBC47E7005D5E31 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		006BC3A72CBC47E7005D5E31 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		006BC3E42CBC5582005D5E31 /* HelloSwift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HelloSwift.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -59,6 +60,7 @@
 		001132052C99A1BC0099CB9B = {
 			isa = PBXGroup;
 			children = (
+				006BC3E42CBC5582005D5E31 /* HelloSwift.xctestplan */,
 				006BC3A62CBC47E7005D5E31 /* LICENSE */,
 				006BC3A72CBC47E7005D5E31 /* README.md */,
 				001132102C99A1BC0099CB9B /* HelloSwift */,
