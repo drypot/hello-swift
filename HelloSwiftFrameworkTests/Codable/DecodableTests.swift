@@ -14,14 +14,13 @@ import Testing
 struct DecodableTests {
 
     @Test func testDecodingSimple() throws {
-        let json = """
+        let data = """
         {
             "id": 1,
             "name": "John Doe",
             "email": "john.doe@example.com"
         }
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let id: Int
@@ -37,7 +36,7 @@ struct DecodableTests {
     }
 
     @Test func testDecodingNested() throws {
-        let json = """
+        let data = """
         {
             "id": 1,
             "name": "John Doe",
@@ -47,8 +46,7 @@ struct DecodableTests {
                 "zipcode": "10001"
             }
         }
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let id: Int
@@ -72,7 +70,7 @@ struct DecodableTests {
     }
 
     @Test func testDecodingArray() throws {
-        let json = """
+        let data = """
         [
             {
                 "id": 1,
@@ -85,8 +83,7 @@ struct DecodableTests {
                 "email": "jane.smith@example.com"
             }
         ]
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let id: Int
@@ -111,14 +108,13 @@ struct DecodableTests {
     }
 
     @Test func testDecodingWithCodingKeys() throws {
-        let json = """
+        let data = """
         {
             "_id": 1,
             "_name": "John Doe",
             "_email": "john.doe@example.com"
         }
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let id: Int
@@ -143,7 +139,7 @@ struct DecodableTests {
     }
 
     @Test func testDecodingManually() throws {
-        let json = """
+        let data = """
         {
             "id": 1,
             "name": "John Doe",
@@ -153,8 +149,7 @@ struct DecodableTests {
                 "zipcode": "10001"
             }
         }
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let id: Int
@@ -197,7 +192,7 @@ struct DecodableTests {
     }
 
     @Test func testDecodingObjectAsArray() throws {
-        let json = """
+        let data = """
         {
           "id1": {
             "name": "John Doe",
@@ -212,8 +207,7 @@ struct DecodableTests {
             "email": "emily@example.com"
           }
         }
-        """
-        let data = Data(json.utf8)
+        """.data(using: .utf8)!
 
         struct User: Decodable {
             let name: String
