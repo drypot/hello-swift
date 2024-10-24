@@ -163,12 +163,12 @@ struct DateTests {
         }
 
         do {
-            let date2 = calendar.date(bySetting: .day, value: 12, of: date1)!
+            let date2 = calendar.date(bySetting: .month, value: 12, of: date1)!
             let check = calendar.dateComponents([.year, .month, .day], from: date2)
 
             #expect(check.year == 2024)
             #expect(check.month == 12)
-            #expect(check.day == 3)
+            #expect(check.day == 1) // not 24
         }
     }
 
