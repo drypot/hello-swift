@@ -20,7 +20,7 @@ struct OptionSetTests {
         static let withMonth = FormatOptions(rawValue: 1 << 3)
     }
 
-    @Test func testOptionSet() async throws {
+    @Test func testOptionSet() throws {
         var options: FormatOptions = [.withFullDate, .withFullTime]
 
         #expect(options.contains(.withFullDate) == true)

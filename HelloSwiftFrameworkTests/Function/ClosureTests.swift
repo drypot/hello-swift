@@ -9,7 +9,7 @@ import Testing
 
 struct ClosureTests {
 
-    @Test func testClosure() async throws {
+    @Test func testClosure() throws {
 
         struct A {
             let param: Int
