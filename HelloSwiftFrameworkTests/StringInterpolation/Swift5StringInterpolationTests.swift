@@ -19,6 +19,8 @@ import Testing
 // String 의 String.StringInterpolation 은 DefaultStringInterpolation 의 typealias 이다.
 // DefaultStringInterpolation 을 확장하면 모든 string interpolation 수식에서 확장 기능을 사용할 수 있다.
 
+// https://www.hackingwithswift.com/articles/178/super-powered-string-interpolation-in-swift-5-0
+
 struct Swift5StringInterpolationTests {
 
     @Test func testSwiftConvertsExpressionToStatements() throws {
