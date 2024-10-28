@@ -44,6 +44,23 @@ struct StringTests {
         #expect("Cafe\u{301}" == "Café")
     }
 
-    
+    @Test func testCount() throws {
 
+        // 🇰🇷
+        // Regional Indicator Symbol Letter K + Regional Indicator Symbol Letter R
+        //
+        // https://unicodeplus.com/U+1F1F0
+        // https://unicodeplus.com/U+1F1F7
+
+        let flag = "🇰🇷"
+        #expect(flag.count == 1)
+        #expect(flag.unicodeScalars.count == 2)
+        #expect(flag.utf8.count == 8)
+        #expect(flag.utf16.count == 4)
+    }
+
+    @Test func testIsEmpty() throws {
+        #expect("".isEmpty == true)
+        #expect("abc".isEmpty == false)
+    }
 }

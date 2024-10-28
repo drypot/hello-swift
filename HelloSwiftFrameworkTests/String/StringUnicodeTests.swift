@@ -5,6 +5,7 @@
 //  Created by Kyuhyun Park on 10/28/24.
 //
 
+import Foundation
 import Testing
 
 struct StringUnicodeTests {
@@ -33,6 +34,7 @@ struct StringUnicodeTests {
         //
         // https://unicodeplus.com/U+00E9
 
+        //
         // Combining Acute Accent
         // Unicode Codepoint: U+0301
         //
@@ -63,24 +65,52 @@ struct StringUnicodeTests {
         #expect("🌍" == "\u{1F30D}")
     }
 
-    @Test func testStringElement() throws {
+    @Test func testStringElements() throws {
         let cafe = "Cafe\u{301} du 🌍"
+        let array = Array(cafe)
 
         #expect(cafe == "Café du 🌍")
         #expect(cafe.count == 9)
 
-        let array = Array(cafe)
-
         #expect(array == ["C", "a", "f", "é", " ", "d", "u", " ", "🌍"])
+        #expect(array.count == 9)
     }
 
     @Test func testUnicodeScalars() throws {
         let cafe = "Cafe\u{301} du 🌍"
+        let elements = Array(cafe.unicodeScalars)
+        let values = cafe.unicodeScalars.map { $0.value }
 
-        #expect(cafe.unicodeScalars.count == 10)
+        #expect(elements == ["C", "a", "f", "e", "\u{0301}", " ", "d", "u", " ", "\u{0001F30D}"])
+        #expect(elements.count == 10)
 
-        let array = Array(cafe.unicodeScalars)
+        //                                                -------                                 -------
+        #expect(values == [0x0043, 0x0061, 0x0066, 0x0065, 0x0301, 0x0020, 0x0064, 0x0075, 0x0020, 0x1F30D])
+        #expect(values.count == 10)
 
-        #expect(array == ["C", "a", "f", "e", "\u{0301}", " ", "d", "u", " ", "\u{0001F30D}"])
+        // let hexString2 = values.map { String(format: "0x%04X,", $0) }.joined(separator: " ")
     }
+
+    @Test func testUTF8() throws {
+        let cafe = "Cafe\u{301} du 🌍"
+        let elements = Array(cafe.utf8)
+
+        //                                          -----------                         ----------------------
+        #expect(elements == [0x43, 0x61, 0x66, 0x65, 0xCC, 0x81, 0x20, 0x64, 0x75, 0x20, 0xF0, 0x9F, 0x8C, 0x8D])
+        #expect(elements.count == 14)
+
+        // let hexString = elements.map { String(format: "0x%02X,", $0) }.joined(separator: " ")
+
+        // C API
+        #expect(strlen(cafe) == 14)
+    }
+
+    @Test func testNSString() throws {
+        let cafe = "Cafe\u{301} du 🌍" as NSString
+
+        #expect(cafe.length == 11)
+
+        // 나머지는 알고싶지 않다.
+    }
+
 }
