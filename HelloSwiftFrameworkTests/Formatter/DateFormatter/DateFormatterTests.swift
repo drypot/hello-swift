@@ -23,71 +23,55 @@ struct DateFormatterTests {
 
     @Test func testLocale() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let formatter = DateFormatter()
         formatter.calendar = calendar
-        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
         formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         formatter.dateStyle = .medium
         formatter.timeStyle = .medium
 
-        do {
-            formatter.locale = Locale(identifier: "ko_KR")
-            #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
-        }
+        formatter.locale = Locale(identifier: "ko_KR")
+        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
 
-        do {
-            formatter.locale = Locale(identifier: "en_US")
-            #expect(formatter.string(from: date) == "Oct 24, 2024 at 5:30:10 PM")
-        }
+        formatter.locale = Locale(identifier: "en_US")
+        #expect(formatter.string(from: date) == "Oct 24, 2024 at 5:30:10 PM")
 
-        do {
-            formatter.locale = Locale(identifier: "zh_CN")
-            #expect(formatter.string(from: date) == "2024年10月24日 17:30:10")
-        }
+        formatter.locale = Locale(identifier: "zh_CN")
+        #expect(formatter.string(from: date) == "2024年10月24日 17:30:10")
 
-        do {
-            formatter.locale = Locale(identifier: "ja_JP")
-            #expect(formatter.string(from: date) == "2024/10/24 17:30:10")
-        }
+        formatter.locale = Locale(identifier: "ja_JP")
+        #expect(formatter.string(from: date) == "2024/10/24 17:30:10")
     }
 
     @Test func testDateTimeStyle() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let formatter = DateFormatter()
         formatter.calendar = calendar
         formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
         formatter.locale = Locale(identifier: "ko_KR")
 
-        do {
-            formatter.dateStyle = .short
-            formatter.timeStyle = .short
-            #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30")
-        }
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30")
 
-        do {
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .medium
-            #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
-        }
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
 
-        do {
-            formatter.dateStyle = .long
-            formatter.timeStyle = .long
-            #expect(formatter.string(from: date) == "2024년 10월 24일 오후 5시 30분 10초 GMT+9")
-        }
+        formatter.dateStyle = .long
+        formatter.timeStyle = .long
+        #expect(formatter.string(from: date) == "2024년 10월 24일 오후 5시 30분 10초 GMT+9")
 
-        do {
-            formatter.dateStyle = .full
-            formatter.timeStyle = .full
-            #expect(formatter.string(from: date) == "2024년 10월 24일 목요일 오후 5시 30분 10초 대한민국 표준시")
-        }
+        formatter.dateStyle = .full
+        formatter.timeStyle = .full
+        #expect(formatter.string(from: date) == "2024년 10월 24일 목요일 오후 5시 30분 10초 대한민국 표준시")
     }
 
     // Date Format Patterns
@@ -95,8 +79,8 @@ struct DateFormatterTests {
 
     @Test func testCustomFormat() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         do {
             // For user-visible representations,
@@ -130,8 +114,8 @@ struct DateFormatterTests {
 
     @Test func testRFC3339Format() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         do {
             // When working with fixed format dates, such as RFC 3339,
@@ -153,14 +137,14 @@ struct DateFormatterTests {
 
     @Test func testParsingDateString() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         do {
             let formatter = DateFormatter()
             formatter.calendar = calendar
-            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
             formatter.locale = Locale(identifier: "ko_KR")
+            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
             formatter.dateStyle = .long
             formatter.timeStyle = .long
@@ -171,8 +155,8 @@ struct DateFormatterTests {
         do {
             let formatter = DateFormatter()
             formatter.calendar = calendar
-            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
             formatter.locale = Locale(identifier: "ko_KR")
+            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
             formatter.dateFormat = "yyyy-MM-dd 'at' HH:mm:ss"
 
             #expect(formatter.date(from: "2024-10-24 at 17:30:10") == date)
@@ -181,8 +165,8 @@ struct DateFormatterTests {
         do {
             let formatter = DateFormatter()
             formatter.calendar = calendar
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
             formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
 
             #expect(formatter.date(from:"2024-10-24T08:30:10Z") == date)

@@ -10,16 +10,18 @@ import Testing
 
 struct MeasurementFormatterTests {
 
-    @Test func test() throws {
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        formatter.locale = Locale(identifier: "en_US")
-        //let measurementString = formatter.string(from: Measurement(value: 1000, unit: ))
+      // TO DO
 
-        let measurementFormatter = MeasurementFormatter()
-        measurementFormatter.unitStyle = .medium
-        let distance = Measurement(value: 5.5, unit: UnitLength.kilometers)
-        let distanceString = measurementFormatter.string(from: distance) // "5.5 km"
-    }
+//    @Test func test() throws {
+//        let formatter = MeasurementFormatter()
+//        formatter.unitOptions = .providedUnit
+//        formatter.locale = Locale(identifier: "en_US")
+//        //let measurementString = formatter.string(from: Measurement(value: 1000, unit: ))
+//
+//        let measurementFormatter = MeasurementFormatter()
+//        measurementFormatter.unitStyle = .medium
+//        let distance = Measurement(value: 5.5, unit: UnitLength.kilometers)
+//        let distanceString = measurementFormatter.string(from: distance) // "5.5 km"
+//    }
 
 }

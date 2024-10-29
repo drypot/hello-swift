@@ -146,13 +146,4 @@ struct NumberFormatterTests {
         #expect(formatter.string(from: 12.12) == "12.12")
     }
 
-    
-//
-//    @Test func testByteCountFormatter() throws {
-//        let formatter = ByteCountFormatter()
-//        formatter.allowedUnits = .useMB
-//        formatter.countStyle = .file
-//        let fileSizeString = formatter.string(fromByteCount: 1048576) // "1 MB"
-//    }
-    
 }

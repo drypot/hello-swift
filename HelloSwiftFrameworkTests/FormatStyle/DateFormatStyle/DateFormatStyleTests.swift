@@ -16,13 +16,13 @@ struct DateFormatStyleTests {
 
     @Test func testFormatStyleWithDefaults() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         var style = Date.FormatStyle()
         style.calendar = calendar
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
         style.locale = Locale(identifier: "ko_KR")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let string1 = date.formatted(style)
         let string2 = style.format(date)
@@ -33,8 +33,8 @@ struct DateFormatStyleTests {
 
     @Test func testFormatStyleWithParams() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         var style = Date.FormatStyle()
             .year(.defaultDigits)
@@ -57,8 +57,8 @@ struct DateFormatStyleTests {
 
     @Test func testFormatStyleWithLongParams() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         var style = Date.FormatStyle()
             .year(.defaultDigits)
@@ -104,14 +104,14 @@ struct DateFormatStyleTests {
     }
 
     @Test func testStaticDateTime() throws {
-        // 편의를 위해 .dateTime 변수가 제공된다.
-        // Date.FormatStyle() 길게 쓰는 것과 같다.
+        // 편의를 위해 FormatStyle.dateTime static 변수가 제공된다.
 
-        let string1 = date.formatted(Date.FormatStyle().year())
-        let string2 = date.formatted(.dateTime.year())
+        let string1 = date.formatted(.dateTime)
+        let string2 = date.formatted(date: .numeric, time: .shortened)
+        let string3 = date.formatted(Date.FormatStyle())
 
-        #expect(string1 == "2024년")
-        #expect(string2 == "2024년")
+        #expect(string1 == string2)
+        #expect(string1 == string3)
     }
 
 }

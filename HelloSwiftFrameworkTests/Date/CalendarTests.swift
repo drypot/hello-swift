@@ -10,14 +10,12 @@ import Testing
 
 struct CalendarTests {
 
-    @Test func testCalendar() throws {
-        let _ = Calendar.current
+    @Test func testLocale() throws {
+        let _ = Locale.current
 
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
-        calendar.locale = Locale(identifier: "ko_KR")
+        let locale = Locale(identifier: "ko_KR")
 
-        #expect(calendar.identifier == .gregorian)
+        #expect(locale.identifier == "ko_KR")
     }
 
     @Test func testTimeZone() throws {
@@ -37,12 +35,14 @@ struct CalendarTests {
         #expect(timeZone.localizedName(for: .generic, locale: Locale(identifier: "en_US")) == "Korean Standard Time")
     }
 
-    @Test func testLocale() throws {
-        let _ = Locale.current
+    @Test func testCalendar() throws {
+        let _ = Calendar.current
 
-        let locale = Locale(identifier: "ko_KR")
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
-        #expect(locale.identifier == "ko_KR")
+        #expect(calendar.identifier == .gregorian)
     }
 
 }

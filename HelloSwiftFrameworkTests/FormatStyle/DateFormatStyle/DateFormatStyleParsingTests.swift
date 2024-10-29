@@ -16,8 +16,8 @@ struct DateFormatStyleParsingTests {
 
     @Test func testParsingWithParseStrategy() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(abbreviation: "CDT")!
         calendar.locale = Locale(identifier: "en_US")
+        calendar.timeZone = TimeZone(abbreviation: "CDT")!
 
         let inputString = "month 8, day 23"
         
@@ -40,13 +40,13 @@ struct DateFormatStyleParsingTests {
 
     @Test func testParsingWithFormatStyle() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         var style = Date.FormatStyle().year().month().day().hour().minute().second()
         style.calendar = calendar
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
         style.locale = Locale(identifier: "ko_KR")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let string1 = date.formatted(style)
 

@@ -11,7 +11,11 @@ import Testing
 struct IntegerFormatStyleTests {
 
     @Test func test() throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        let style = IntegerFormatStyle<Int>()
+
+        #expect(style.format(123) == "123")
+        #expect(123.formatted(style) == "123")
+        #expect(123.formatted(.number) == "123")
     }
 
 }

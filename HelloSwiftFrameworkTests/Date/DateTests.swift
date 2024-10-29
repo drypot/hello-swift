@@ -74,8 +74,8 @@ struct DateTests {
     
     @Test func testMakingDateFromComponents() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let components = DateComponents(year: 2024, month: 10, day: 24, hour: 17, minute: 30, second: 10)
         let date = calendar.date(from: components)!
@@ -85,8 +85,8 @@ struct DateTests {
 
     @Test func testMakingCompoentsFromDate() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
@@ -116,8 +116,8 @@ struct DateTests {
 
     @Test func testComponentFromDate() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let components = DateComponents(year: 2024, month: 10, day: 24, hour: 17, minute: 30, second: 10)
         let date = calendar.date(from: components)!
@@ -132,8 +132,8 @@ struct DateTests {
 
     @Test func testDateArithmetic() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let components1 = DateComponents(year: 2024, month: 10, day: 24, hour: 17, minute: 30, second: 10)
         let date1 = calendar.date(from: components1)!
@@ -168,8 +168,8 @@ struct DateTests {
 
     @Test func testDateComparison() throws {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let components1 = DateComponents(year: 2024, month: 10, day: 24, hour: 17, minute: 30, second: 10)
         let date1 = calendar.date(from: components1)!
