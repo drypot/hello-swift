@@ -14,7 +14,7 @@ struct DateFormatStyleTests {
     // 2024-10-24 17:30:10 +0900
     let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
-    @Test func testPredefinedStyles() throws {
+    @Test func testPredefined() throws {
         // Calendar, TimeZone, Locale 이 다르면 오류가 날 것이다;
 
         #expect(date.formatted() == "2024. 10. 24. 오후 5:30")
@@ -29,7 +29,12 @@ struct DateFormatStyleTests {
         #expect(date.formatted(date: .omitted, time: .complete)    == "오후 5시 30분 10초 GMT+9")
     }
 
-    @Test func testFormatStyleWithDefaults() throws {
+    @Test func testFactoryVariable() throws {
+        let string1 = date.formatted(.dateTime.year().month().day())
+        #expect(string1 == "2024년 10월 24일")
+    }
+
+    @Test func testFormatStyle() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
@@ -46,7 +51,7 @@ struct DateFormatStyleTests {
         #expect(string1 == "2024. 10. 24. 오후 5:30")
     }
 
-    @Test func testFormatStyleWithModifiers() throws {
+    @Test func testModifiers() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
@@ -70,7 +75,7 @@ struct DateFormatStyleTests {
         #expect(date.formatted(style) == "Thu, Oct 24, 2024 at 5:30 PM")
     }
 
-    @Test func testFormatStyleWithLongModifiers() throws {
+    @Test func testLongModifiers() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
@@ -101,16 +106,6 @@ struct DateFormatStyleTests {
 
         style.locale = Locale(identifier: "ja_JP")
         #expect(date.formatted(style) == "西暦2024年10月24日(木) (週: 43) 17:30 Asia/Seoul")
-    }
-
-    @Test func testFactoryVariable() throws {
-        // 편의를 위해 FormatStyle.dateTime static 변수가 제공된다.
-
-        let string1 = date.formatted(.dateTime.year().month().day())
-        let string2 = date.formatted(Date.FormatStyle().year().month().day())
-
-        #expect(string1 == string2)
-        #expect(string1 == "2024년 10월 24일")
     }
 
 }

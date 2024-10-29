@@ -14,18 +14,22 @@ struct DateISO8601FormatStyleTests {
     // 2024-10-24 17:30:10 +0900
     let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
-    @Test func testFormattingWithDefaults() throws {
-        let style = Date.ISO8601FormatStyle()
-        //style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+    @Test func testFactoryVariable() throws {
+        #expect(date.formatted(.iso8601) == "2024-10-24T08:30:10Z")
+    }
+
+    @Test func testDefaults() throws {
+        var style = Date.ISO8601FormatStyle()
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         let string1 = date.formatted(style)
         let string2 = style.format(date)
 
         #expect(string1 == string2)
-        #expect(string1 == "2024-10-24T08:30:10Z")
+        #expect(string1 == "2024-10-24T17:30:10+0900")
     }
 
-    @Test func testFormattingWithParams() throws {
+    @Test func testModifiers() throws {
         var style = Date.ISO8601FormatStyle()
             .year().month().day().time(includingFractionalSeconds: false)
             .dateTimeSeparator(.space)
