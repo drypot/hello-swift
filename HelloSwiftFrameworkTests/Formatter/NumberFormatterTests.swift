@@ -32,10 +32,12 @@ struct NumberFormatterTests {
         let distance = Measurement(value: 5.5, unit: UnitLength.kilometers)
         let distanceString = measurementFormatter.string(from: distance) // "5.5 km"
     }
+
     @Test func testByteCountFormatter() throws {
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = .useMB
         formatter.countStyle = .file
         let fileSizeString = formatter.string(fromByteCount: 1048576) // "1 MB"
     }
+    
 }
