@@ -73,7 +73,10 @@ struct RetainingTimeTest {
             array.append(object)
         }
     }
-    
+
+    // https://developer.apple.com/documentation/swift/continuousclock
+    // https://developer.apple.com/documentation/swift/continuousclock/instant/duration
+
     func interval(_ work: () throws -> Void) rethrows -> String {
         let clock = ContinuousClock()
         let result = try clock.measure(work)
