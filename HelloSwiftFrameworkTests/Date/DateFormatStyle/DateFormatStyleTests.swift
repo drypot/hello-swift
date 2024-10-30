@@ -14,6 +14,11 @@ struct DateFormatStyleTests {
     // 2024-10-24 17:30:10 +0900
     let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
+    @Test func testFactoryVariable() throws {
+        let string = date.formatted(.dateTime.year().month().day())
+        #expect(string == "2024년 10월 24일")
+    }
+
     @Test func testPredefined() throws {
         // Calendar, TimeZone, Locale 이 다르면 오류가 날 것이다;
 
@@ -27,11 +32,6 @@ struct DateFormatStyleTests {
         #expect(date.formatted(date: .omitted, time: .shortened)   == "오후 5:30")
         #expect(date.formatted(date: .omitted, time: .standard)    == "오후 5:30:10")
         #expect(date.formatted(date: .omitted, time: .complete)    == "오후 5시 30분 10초 GMT+9")
-    }
-
-    @Test func testFactoryVariable() throws {
-        let string1 = date.formatted(.dateTime.year().month().day())
-        #expect(string1 == "2024년 10월 24일")
     }
 
     @Test func testFormatStyle() throws {
