@@ -8,10 +8,20 @@
 import Foundation
 import Testing
 
+// Sequence protocol:
+// A type that provides sequential, iterated access to its elements.
+
 struct SequenceTests {
 
-    @Test func test() throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    @Test func testForInLoop() throws {
+        let oneTwoThree = 1...3
+        var sum = 0
+
+        for number in oneTwoThree {
+            sum += number
+        }
+
+        #expect(sum == 6)
     }
 
 }
