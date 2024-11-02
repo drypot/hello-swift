@@ -16,13 +16,9 @@ struct RangeTests {
         #expect(underFive.contains(3.14) == true)
         #expect(underFive.contains(6.28) == false)
         #expect(underFive.contains(5.0) == false)
-    }
 
-    @Test func testIsEmpty() throws {
-        let empty = 0.0..<0.0
-
-        #expect(empty.contains(0.0) == false)
-        #expect(empty.isEmpty == true)
+        #expect(underFive.lowerBound == 0.0)
+        #expect(underFive.upperBound == 5.0)
     }
 
     @Test func testClosedRange() throws {
@@ -31,6 +27,8 @@ struct RangeTests {
         #expect(throughFive.contains(3.14) == true)
         #expect(throughFive.contains(6.28) == false)
         #expect(throughFive.contains(5.0) == true)
+
+        #expect(Range(0...5) == 0..<6)
     }
 
     @Test func testPartialRangeUpTo() throws {
@@ -73,5 +71,13 @@ struct RangeTests {
 
         #expect(joined == "012345")
     }
+
+    @Test func testIsEmpty() throws {
+        let empty = 0.0..<0.0
+
+        #expect(empty.contains(0.0) == false)
+        #expect(empty.isEmpty == true)
+    }
+
 
 }
