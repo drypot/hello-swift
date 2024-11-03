@@ -14,14 +14,14 @@ import Testing
 struct SequenceTests {
 
     @Test func testForInLoop() throws {
-        let oneTwoThree = 1...3
-        var sum = 0
+        let range = 0...2
+        var joined = ""
 
-        for number in oneTwoThree {
-            sum += number
+        for number in range {
+            joined += String(number)
         }
 
-        #expect(sum == 6)
+        #expect(joined == "012")
     }
 
 }
