@@ -8,12 +8,13 @@
 import Foundation
 import Testing
 
-// Sequence protocol:
+// protocol Sequence<Element>
+//
 // A type that provides sequential, iterated access to its elements.
 
 struct SequenceTests {
 
-    @Test func testForInLoop() throws {
+    @Test func testForLoop() throws {
         let range = 0...2
         var joined = ""
 
@@ -23,5 +24,7 @@ struct SequenceTests {
 
         #expect(joined == "012")
     }
+
+    // 기타 다양한 메서트 테스트는, 나중에 필요하면;
 
 }
