@@ -31,8 +31,11 @@ struct MeasurementTests {
         let m1 = Measurement(value: 90, unit: UnitDuration.seconds)
         let m2 = Measurement(value: 1, unit: UnitDuration.minutes)
 
-        #expect(m1 + m2 == Measurement(value: 150, unit: .seconds))
-        #expect(m1 - m2 == Measurement(value: 30, unit: .seconds))
+        let sum = m1 + m2
+        let diff = m1 - m2
+
+        #expect(sum == Measurement(value: 150, unit: .seconds))
+        #expect(diff == Measurement(value: 30, unit: .seconds))
     }
 
 }

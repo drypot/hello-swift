@@ -46,6 +46,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0014BA0D2CD9958700556F05 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwift" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Collections/Protocols/SequenceProtocol/SequenceSelectingElementsTest.swift,
+			);
+			target = 005906F92CBCD9A800B8698C /* HelloSwift */;
+		};
 		0059073F2CBCDE5100B8698C /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFramework" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
@@ -71,6 +78,9 @@
 		};
 		005907372CBCDE5100B8698C /* HelloSwiftFrameworkTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0014BA0D2CD9958700556F05 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwift" target */,
+			);
 			path = HelloSwiftFrameworkTests;
 			sourceTree = "<group>";
 		};

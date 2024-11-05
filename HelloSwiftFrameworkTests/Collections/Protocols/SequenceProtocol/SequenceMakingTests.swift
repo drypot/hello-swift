@@ -1,5 +1,5 @@
 //
-//  MakingSequenceTests.swift
+//  SequenceMakingTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 11/4/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-struct MakingSequenceTests {
+struct SequenceMakingTests {
 
     @Test func testIterator() throws {
         let range = 0...2
@@ -20,7 +20,7 @@ struct MakingSequenceTests {
         #expect(iterator.next() == nil)
     }
 
-    @Test func testSequence() throws {
+    @Test func testMakingSequence() throws {
 
         struct Counter: Sequence {
             let end: Int
