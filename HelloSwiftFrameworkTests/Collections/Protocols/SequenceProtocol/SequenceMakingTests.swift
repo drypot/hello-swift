@@ -49,13 +49,13 @@ struct SequenceMakingTests {
             }
         }
 
-        var joined = ""
+        var result: [Int] = []
 
         for count in Counter(limit: 3) {
-            joined += String(count)
+            result.append(count)
         }
 
-        #expect(joined == "012")
+        #expect(result == [0, 1, 2])
     }
 
     @Test func testMakingCompactSequence() throws {
@@ -84,12 +84,12 @@ struct SequenceMakingTests {
             }
         }
 
-        var joined = ""
+        var result: [Int] = []
 
         for count in Counter(limit: 3) {
-            joined += String(count)
+            result.append(count)
         }
 
-        #expect(joined == "012")
+        #expect(result == [0, 1, 2])
     }
 }

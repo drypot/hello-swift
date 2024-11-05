@@ -23,27 +23,27 @@ struct StrideTests {
         // struct StrideTo<Element> where Element : Strideable
         // StrideTo confirms to Sequence
 
-        var joined = ""
         let seq: StrideTo<Int> = stride(from: 0, to: 5, by: 1)
+        var result: [Int] = []
 
         for i in seq {
-            joined += String(i)
+            result.append(i)
         }
 
-        #expect(joined == "01234")
+        #expect(result == [0, 1, 2, 3, 4])
     }
 
     @Test func testStrideThrough() throws {
         // struct StrideThrough<Element> where Element : Strideable
         // StrideThrough confirms to Sequence
 
-        var joined = ""
         let seq: StrideThrough<Int> = stride(from: 0, through: 5, by: 1)
+        var result: [Int] = []
 
         for i in seq {
-            joined += String(i)
+            result.append(i)
         }
 
-        #expect(joined == "012345")
+        #expect(result == [0, 1, 2, 3, 4, 5])
     }
 }

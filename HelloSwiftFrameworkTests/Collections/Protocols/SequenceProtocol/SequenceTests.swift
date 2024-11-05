@@ -16,13 +16,14 @@ struct SequenceTests {
 
     @Test func testForLoop() throws {
         let range = 0...2
-        var joined = ""
+        
+        var result: [Int] = []
 
         for number in range {
-            joined += String(number)
+            result.append(number)
         }
 
-        #expect(joined == "012")
+        #expect(result == [0, 1, 2])
     }
 
     // 기타 다양한 메서트 테스트는, 나중에 필요하면;

@@ -53,23 +53,23 @@ struct RangeTests {
     }
 
     @Test func testForLoop() throws {
-        var joined = ""
+        var result: [Int] = []
 
         for i in 0..<5 {
-            joined += String(i)
+            result.append(i)
         }
 
-        #expect(joined == "01234")
+        #expect(result == [0, 1, 2, 3, 4])
     }
 
     @Test func testForLoopClosedRange() throws {
-        var joined = ""
+        var result: [Int] = []
 
         for i in 0...5 {
-            joined += String(i)
+            result.append(i)
         }
 
-        #expect(joined == "012345")
+        #expect(result == [0, 1, 2, 3, 4, 5])
     }
 
     @Test func testIsEmpty() throws {
@@ -78,6 +78,5 @@ struct RangeTests {
         #expect(empty.contains(0.0) == false)
         #expect(empty.isEmpty == true)
     }
-
 
 }
