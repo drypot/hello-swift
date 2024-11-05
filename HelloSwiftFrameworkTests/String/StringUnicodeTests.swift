@@ -52,15 +52,16 @@ struct StringUnicodeTests {
         // UTF32 0x0001_F30D
         // Swift \u{1F30D}
 
-        #expect("é" == "\u{00E9}")
-        #expect("é" == "e\u{0301}")
-        #expect("é".unicodeScalars.first == "é")
-        #expect("é".unicodeScalars.first == Unicode.Scalar(0x00E9))
-        #expect("é".unicodeScalars.first?.value == 0x00E9)
-        #expect(Array("é".unicodeScalars) == [Unicode.Scalar(0x00E9)])
-        #expect("é".unicodeScalars.map { $0.value } == [0x00E9])
-        #expect(Array("é".utf8) == [0xC3, 0xA9])
-        #expect(Array("é".utf16) == [0x00E9])
+        let eWithAcute = "é"
+
+        #expect(eWithAcute == "\u{00E9}")
+        #expect(eWithAcute == "e\u{0301}")
+        #expect(eWithAcute.unicodeScalars.first == Unicode.Scalar(0x00E9))
+        #expect(eWithAcute.unicodeScalars.first?.value == 0x00E9)
+        #expect(Array(eWithAcute.unicodeScalars) == [Unicode.Scalar(0x00E9)])
+        #expect(eWithAcute.unicodeScalars.map { $0.value } == [0x00E9])
+        #expect(Array(eWithAcute.utf8) == [0xC3, 0xA9])
+        #expect(Array(eWithAcute.utf16) == [0x00E9])
 
         #expect("🌍" == "\u{1F30D}")
     }
