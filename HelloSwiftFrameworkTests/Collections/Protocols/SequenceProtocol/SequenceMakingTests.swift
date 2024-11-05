@@ -49,7 +49,7 @@ struct SequenceMakingTests {
             }
         }
 
-        var result: [Int] = []
+        var result = [Int]()
 
         for count in Counter(limit: 3) {
             result.append(count)
@@ -84,7 +84,7 @@ struct SequenceMakingTests {
             }
         }
 
-        var result: [Int] = []
+        var result = [Int]()
 
         for count in Counter(limit: 3) {
             result.append(count)

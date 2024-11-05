@@ -53,7 +53,7 @@ struct RangeTests {
     }
 
     @Test func testForLoop() throws {
-        var result: [Int] = []
+        var result = [Int]()
 
         for i in 0..<5 {
             result.append(i)
@@ -63,7 +63,7 @@ struct RangeTests {
     }
 
     @Test func testForLoopClosedRange() throws {
-        var result: [Int] = []
+        var result = [Int]()
 
         for i in 0...5 {
             result.append(i)

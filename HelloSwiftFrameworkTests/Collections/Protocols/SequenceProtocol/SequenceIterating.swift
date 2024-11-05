@@ -1,5 +1,5 @@
 //
-//  SequenceTests.swift
+//  SequenceIterating.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 11/1/24.
@@ -12,12 +12,12 @@ import Testing
 //
 // A type that provides sequential, iterated access to its elements.
 
-struct SequenceTests {
+struct SequenceIterating {
 
     @Test func testForLoop() throws {
         let range = 0...2
         
-        var result: [Int] = []
+        var result = [Int]()
 
         for number in range {
             result.append(number)

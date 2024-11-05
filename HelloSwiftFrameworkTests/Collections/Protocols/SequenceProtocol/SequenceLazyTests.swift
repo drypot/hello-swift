@@ -21,7 +21,7 @@ struct SequenceLazyTests {
         let lazyfiltered = lazy.filter { $0 % 2 == 0 }  // 2, 4, 6, 8, 10
         let lazyFilteredMapped = lazyfiltered.map { $0 * $0 }  // 4, 16, 36, 64, 100
 
-        var result: [Int] = []
+        var result = [Int]()
 
         for value in lazyFilteredMapped {
             result.append(value)

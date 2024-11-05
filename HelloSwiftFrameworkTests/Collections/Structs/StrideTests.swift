@@ -24,7 +24,7 @@ struct StrideTests {
         // StrideTo confirms to Sequence
 
         let seq: StrideTo<Int> = stride(from: 0, to: 5, by: 1)
-        var result: [Int] = []
+        var result = [Int]()
 
         for i in seq {
             result.append(i)
@@ -38,7 +38,7 @@ struct StrideTests {
         // StrideThrough confirms to Sequence
 
         let seq: StrideThrough<Int> = stride(from: 0, through: 5, by: 1)
-        var result: [Int] = []
+        var result = [Int]()
 
         for i in seq {
             result.append(i)
