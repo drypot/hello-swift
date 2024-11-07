@@ -138,7 +138,7 @@ struct ClassInitTest {
 
         class Handler {
 
-            static var checker = "uninited"
+            nonisolated(unsafe) static var checker = "uninited"
 
             init() {
                 Self.checker = "inited"

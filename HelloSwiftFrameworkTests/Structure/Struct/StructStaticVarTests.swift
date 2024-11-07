@@ -10,9 +10,9 @@ import Testing
 
 struct StructStaticVarTests {
 
-    static var log = [String]()
+    nonisolated(unsafe) static var log = [String]()
 
-    static var var1 = {
+    nonisolated(unsafe) static var var1 = {
         log.append("var1")
         return "*"
     }()
