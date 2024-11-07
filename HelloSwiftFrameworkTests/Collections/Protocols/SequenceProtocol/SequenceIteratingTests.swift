@@ -8,10 +8,6 @@
 import Foundation
 import Testing
 
-// protocol Sequence<Element>
-//
-// A type that provides sequential, iterated access to its elements.
-
 struct SequenceIteratingTests {
 
     @Test func testForLoop() throws {

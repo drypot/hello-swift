@@ -8,6 +8,10 @@
 import Foundation
 import Testing
 
+// protocol Sequence<Element>
+//
+// A type that provides sequential, iterated access to its elements.
+
 struct SequenceMakingTests {
 
     @Test func testIterator() throws {
@@ -49,9 +53,10 @@ struct SequenceMakingTests {
             }
         }
 
+        let seq = Counter(limit: 3)
         var result = [Int]()
 
-        for count in Counter(limit: 3) {
+        for count in seq {
             result.append(count)
         }
 
