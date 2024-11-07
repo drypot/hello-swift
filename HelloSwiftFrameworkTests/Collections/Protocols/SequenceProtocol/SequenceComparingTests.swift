@@ -45,5 +45,24 @@ struct SequenceComparingTests {
         #expect(c.starts(with: a) { $0 == $1 + 2 } == true)
     }
 
+    @Test func testLexicographicallyPrecedes() throws {
 
+        // 시퀀스의 크고 작음을 판단하는데 유니코드 처리는 안 하는,
+        // 엘리먼트끼리 단순 < 수치 비교이다.
+
+        let a = [1, 2, 2, 2]
+        let b = [1, 2, 3, 4]
+
+        #expect(a.lexicographicallyPrecedes(b) == true)
+        #expect(b.lexicographicallyPrecedes(b) == false)
+    }
+
+    @Test func testLexicographicallyPrecedesBy() throws {
+
+        let a = [1, 2, 2, 2]
+        let b = [1, 2, 3, 4]
+
+        #expect(a.lexicographicallyPrecedes(b) { $0 < $1 } == true)
+        #expect(b.lexicographicallyPrecedes(b) { $0 < $1 } == false)
+    }
 }
