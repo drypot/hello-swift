@@ -30,7 +30,11 @@ struct SequenceLazyTests {
         #expect(result == [4, 16, 36, 64, 100])
     }
 
-    @Test mutating func testLazyStepByStep() throws {
+    @Test func testLazyStepByStep() throws {
+
+        struct Log {
+            nonisolated(unsafe) static var log = [String]()
+        }
 
         struct Base: Sequence {
             let limit: Int
@@ -46,7 +50,7 @@ struct SequenceLazyTests {
 
             mutating func next() -> Int? {
                 guard current < limit else { return nil }
-                SimpleLog.log("base \(current)", tag: "LazySequenceTest")
+                Log.log.append("base \(current)")
                 defer { current += 1 }
                 return current
             }
@@ -54,21 +58,19 @@ struct SequenceLazyTests {
 
         let seq = Base(limit: 10).lazy
             .filter {
-                SimpleLog.log("filtering \($0)", tag: "LazySequenceTest")
+                Log.log.append("filtering \($0)")
                 return $0 % 2 == 0
             }
             .map {
-                SimpleLog.log("mapping \($0)", tag: "LazySequenceTest")
+                Log.log.append("mapping \($0)")
                 return $0 * $0
             }
 
         for value in seq {
-            SimpleLog.log("consuming \(value)", tag: "LazySequenceTest")
+            Log.log.append("consuming \(value)")
         }
 
-        let log = SimpleLog.log(withTag: "LazySequenceTest")
-
-        #expect(log == [
+        #expect(Log.log == [
             "base 0", "filtering 0", "mapping 0", "consuming 0",
             "base 1", "filtering 1",
             "base 2", "filtering 2", "mapping 2", "consuming 4",
@@ -81,5 +83,4 @@ struct SequenceLazyTests {
             "base 9", "filtering 9"
         ])
     }
-
 }
