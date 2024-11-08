@@ -11,6 +11,8 @@ import Testing
 // protocol Collection<Element> : Sequence
 // 
 // A sequence whose elements can be accessed by an indexed subscript.
+//
+// https://github.com/swiftlang/swift/blob/main/stdlib/public/core/Collection.swift
 
 struct CollectionTests {
 
