@@ -5,11 +5,11 @@
 //  Created by drypot on 2024-04-06.
 //
 
-import XCTest
+import Testing
 
-final class StructTests: XCTestCase {
-    
-    func testStructCopy() throws {
+struct StructTests {
+
+    @Test func testStructCopy() throws {
         struct T {
             var p = "x"
         }
@@ -19,10 +19,10 @@ final class StructTests: XCTestCase {
         
         b.p = "y"
         
-        XCTAssertEqual(a.p, "x") // *** x
+        #expect(a.p == "x") // *** x
     }
     
-    func testClassCopy() throws {
+    @Test func testClassCopy() throws {
         class T {
             var p = "x"
         }
@@ -32,10 +32,10 @@ final class StructTests: XCTestCase {
         
         b.p = "y"
         
-        XCTAssertEqual(a.p, "y") // *** y
+        #expect(a.p == "y") // *** y
     }
     
-    func testStructDeepCopy() throws {
+    @Test func testStructDeepCopy() throws {
         struct T {
             var p: [Int] = [1, 2]
         }
@@ -45,11 +45,11 @@ final class StructTests: XCTestCase {
         
         b.p.append(3)
         
-        XCTAssertEqual(a.p.count, 2) // *** 2
-        XCTAssertEqual(b.p.count, 3)
+        #expect(a.p.count == 2) // *** 2
+        #expect(b.p.count == 3)
     }
     
-    func testClassDeepCopy() throws {
+    @Test func testClassDeepCopy() throws {
         class T {
             var p: [Int] = [1, 2]
         }
@@ -59,11 +59,11 @@ final class StructTests: XCTestCase {
         
         b.p.append(3)
         
-        XCTAssertEqual(a.p.count, 3) // *** 3
-        XCTAssertEqual(b.p.count, 3)
+        #expect(a.p.count == 3) // *** 3
+        #expect(b.p.count == 3)
     }
     
-    func testStructDeepCopy2() throws {
+    @Test func testStructDeepCopy2() throws {
         struct T {
             var p: [[Int]] = [[1, 2]]
         }
@@ -73,11 +73,11 @@ final class StructTests: XCTestCase {
         
         b.p[0].append(3)
         
-        XCTAssertEqual(a.p[0].count, 2) // *** 2
-        XCTAssertEqual(b.p[0].count, 3)
+        #expect(a.p[0].count == 2) // *** 2
+        #expect(b.p[0].count == 3)
     }
     
-    func testClassDeepCopy2() throws {
+    @Test func testClassDeepCopy2() throws {
         class T {
             var p: [[Int]] = [[1, 2]]
         }
@@ -87,7 +87,8 @@ final class StructTests: XCTestCase {
         
         b.p[0].append(3)
         
-        XCTAssertEqual(a.p[0].count, 3) // *** 3
-        XCTAssertEqual(b.p[0].count, 3)
+        #expect(a.p[0].count == 3) // *** 3
+        #expect(b.p[0].count == 3)
     }
+    
 }
