@@ -2,37 +2,48 @@
 //  CollectionTests.swift
 //  HelloSwiftFrameworkTests
 //
-//  Created by Kyuhyun Park on 11/4/24.
+//  Created by Kyuhyun Park on 11/10/24.
 //
 
 import Foundation
 import Testing
 
-// protocol Collection<Element> : Sequence
-// 
-// A sequence whose elements can be accessed by an indexed subscript.
-//
-// https://github.com/swiftlang/swift/blob/main/stdlib/public/core/Collection.swift
-
 struct CollectionTests {
 
-    let text = "Buffalo buffalo buffalo buffalo."
+    @Test func testEmpty() throws {
+        let collection = [Int]()
 
-    @Test func testStartIndex() throws {
-        #expect(text[text.startIndex] == "B")
-        #expect(text.first == "B")
+        #expect(collection.isEmpty == true)
+        #expect(collection.count == 0)
+        #expect(collection.first == nil)
     }
 
-    @Test func testRangedSubscript() throws {
-        let firstSpace = text.firstIndex(of: " ") ?? text.endIndex
-        let firstWord = text[..<firstSpace]
-        #expect(firstWord == "Buffalo")
+    @Test func testCollection() throws {
+        let collection = [0, 1, 2, 3, 4, 5]
+
+        #expect(collection.isEmpty == false)
+        #expect(collection.count == 6)
+        #expect(collection.first == 0)
     }
 
-    @Test func testPrefix() throws {
-        let firstWord = text.prefix { $0 != " " }
-        #expect(firstWord == "Buffalo")
+    @Test func testRemoveFirst() throws {
+        var collection = [0, 1, 2, 3, 4, 5]
+        var element: Int
+
+        element = collection.removeFirst()
+
+        #expect(element == 0)
+        #expect(collection == [1, 2, 3, 4, 5])
+
+        element = collection.removeFirst()
+
+        #expect(element == 1)
+        #expect(collection == [2, 3, 4, 5])
+
+        // Available when Self is Self.SubSequence.
+        //
+        // value = array.popFirst()
+        // array.removeFirst(3)
     }
 
-    
 }

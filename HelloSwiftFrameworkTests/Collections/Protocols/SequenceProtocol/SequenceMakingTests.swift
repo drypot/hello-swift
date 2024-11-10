@@ -1,5 +1,5 @@
 //
-//  SequenceTests.swift
+//  SequenceMakingTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 11/4/24.
@@ -14,7 +14,7 @@ import Testing
 
 // https://github.com/swiftlang/swift/blob/main/stdlib/public/core/Sequence.swift
 
-struct SequenceTests {
+struct SequenceMakingTests {
 
     struct Counter: Sequence {
         let limit: Int

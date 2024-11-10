@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+// https://developer.apple.com/documentation/swift/sequence/split(separator:maxsplits:omittingemptysubsequences:)
+
 struct SequenceSplittingTests {
 
     @Test func testSplit() throws {
