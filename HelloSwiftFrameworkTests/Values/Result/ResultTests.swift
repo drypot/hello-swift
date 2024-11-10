@@ -17,26 +17,36 @@ struct ResultTests {
         case invalidString
     }
 
-    func parseString(_ string: String) -> Result<Int, ParsingError> {
+    func parse(_ string: String) throws -> Int {
+        guard let parsed = Int(string) else {
+            throw ParsingError.invalidString
+        }
+        return parsed
+    }
+
+    func parseAsResult(_ string: String) -> Result<Int, ParsingError> {
         guard let parsed = Int(string) else {
             return .failure(.invalidString)
         }
         return .success(parsed)
     }
 
-    @Test func testSuccessCase() throws {
-        let result = parseString("123")
-        switch result {
+    @Test func testException() throws {
+        #expect(try parse("123") == 123)
+        #expect(throws: ParsingError.invalidString) {
+            try parse("xxx")
+        }
+    }
+
+    @Test func testResultWithSwitch() throws {
+        switch parseAsResult("123") {
         case .success(let value):
             #expect(value == 123)
         case .failure:
             fatalError()
         }
-    }
 
-    @Test func testFailCase() throws {
-        let result = parseString("xxx")
-        switch result {
+        switch parseAsResult("xxx") {
         case .success:
             fatalError()
         case .failure(let error):
@@ -44,4 +54,54 @@ struct ResultTests {
         }
     }
 
+    @Test func testResultWithIfCase() throws {
+        if case .success(let value) = parseAsResult("123") {
+            #expect(value == 123)
+        } else {
+            fatalError()
+        }
+
+        if case .failure(let error) = parseAsResult("xxx") {
+            #expect(error == .invalidString)
+        } else {
+            fatalError()
+        }
+    }
+
+    @Test func testResultEquality() throws {
+        #expect(parseAsResult("123") == .success(123))
+        #expect(parseAsResult("xxx") == .failure(.invalidString))
+    }
+
+    @Test func testConvertingExceptionToResult() throws {
+        let result1 = Result {
+            try parse("123")
+        }.mapError { _ in ParsingError.invalidString }
+
+        #expect(result1 == .success(123))
+
+        let result2 = Result {
+            try parse("xxx")
+        }.mapError { _ in ParsingError.invalidString }
+
+        #expect(result2 == .failure(.invalidString))
+    }
+
+    @Test func testConvertingResultToException() throws {
+        #expect(try parseAsResult("123").get() == 123)
+
+        #expect(throws: ParsingError.invalidString) {
+            try parseAsResult("xxx").get()
+        }
+    }
+
+    @Test func testMap() throws {
+        let result1 = parseAsResult("123").map { "mapped \($0)" }
+
+        #expect(result1 == .success("mapped 123"))
+
+        let result2 = parseAsResult("xxx").map { "mapped \($0)" }
+
+        #expect(result2 == .failure(.invalidString))
+    }
 }
