@@ -9,25 +9,25 @@ import Foundation
 import Testing
 
 // protocol Sequence<Element>
-//
 // A type that provides sequential, iterated access to its elements.
-
 // https://github.com/swiftlang/swift/blob/main/stdlib/public/core/Sequence.swift
 
 struct SequenceMakingTests {
 
     struct Counter: Sequence {
-        let limit: Int
+        typealias Element = Int
+
+        let limit: Element
 
         func makeIterator() -> Iterator {
             return Iterator(limit: limit)
         }
 
         struct Iterator: IteratorProtocol {
-            let limit: Int
+            let limit: Element
             var current = 0
 
-            mutating func next() -> Int? {
+            mutating func next() -> Element? {
                 guard current < limit else { return nil }
                 defer { current += 1 }
                 return current
@@ -41,10 +41,12 @@ struct SequenceMakingTests {
     // 그냥 self 를 리턴하는데 struct 라 복제본이 넘어오는 개념일 듯.
 
     struct CounterCompact: Sequence, IteratorProtocol {
-        let limit: Int
+        typealias Element = Int
+
+        let limit: Element
         var current = 0
 
-        mutating func next() -> Int? {
+        mutating func next() -> Element? {
             guard current < limit else { return nil }
             defer { current += 1 }
             return current
