@@ -94,12 +94,14 @@ struct DecodableTests {
         let users = try! JSONDecoder().decode([User].self, from: data)
 
         #expect(users.count == 2)
+
         do {
             let user = users[0]
             #expect(user.id == 1)
             #expect(user.name == "John Doe")
             #expect(user.email == "john.doe@example.com")
         }
+
         do {
             let user = users[1]
             #expect(user.id == 2)
