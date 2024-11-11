@@ -104,4 +104,20 @@ struct ResultTests {
 
         #expect(result2 == .failure(.invalidString))
     }
+
+    @Test func testNever() throws {
+
+        // Never 는 Error 의 서브 타입이다.
+        // Never 인스턴스는 임의로 만들 수 없다.
+        // 함수가 리턴하지 않거나, 항상 success 를 리턴하는 Result 를 기술하기 위해 사용한다.
+
+        func sub() -> Result<Int, Never> {
+            return .success(10)
+        }
+
+        switch sub() {
+        case .success(let value):
+            #expect(value == 10)
+        }
+    }
 }

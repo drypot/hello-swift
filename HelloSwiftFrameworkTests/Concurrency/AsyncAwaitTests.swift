@@ -15,6 +15,13 @@ import Testing
 // Inside the body of an asynchronous function,
 // you mark each of these places where execution can be suspended.
 
+// When adding concurrent code to an existing project, work from the top down.
+// Specifically, start by converting the top-most layer of code to use concurrency,
+// and then start converting the functions and methods that it calls,
+// working through the project’s architecture one layer at a time.
+// There’s no way to take a bottom-up approach,
+// because synchronous code can’t ever call asynchronous code.
+
 struct AsyncAwaitTests {
 
     func fetchNames() async -> [String] {
@@ -41,5 +48,6 @@ struct AsyncAwaitTests {
     @Test func testTaskSleep() async throws {
         try await Task.sleep(for: .seconds(0.1))
     }
-    
+
+
 }

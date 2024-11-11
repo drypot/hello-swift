@@ -42,4 +42,32 @@ struct AsyncSequenceTests {
         #expect(result == [0, 1, 2])
     }
 
+    struct AsyncCounterCompact: AsyncSequence, AsyncIteratorProtocol {
+        typealias Element = Int
+
+        let limit: Element
+        var current = 0
+
+        func makeAsyncIterator() -> Self {
+            return self
+        }
+
+        mutating func next() async -> Element? {
+            guard current < limit else { return nil }
+            defer { current += 1 }
+            return current
+        }
+    }
+
+    @Test func testAsyncCounterCompact() async throws {
+        let counter = AsyncCounterCompact(limit: 3)
+        var result = [Int]()
+
+        for await count in counter {
+            result.append(count)
+        }
+
+        #expect(result == [0, 1, 2])
+    }
+    
 }

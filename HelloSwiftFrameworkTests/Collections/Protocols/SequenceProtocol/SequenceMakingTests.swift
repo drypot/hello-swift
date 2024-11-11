@@ -39,12 +39,17 @@ struct SequenceMakingTests {
     //
     // makeIterator() 는 default 구현에서 온다.
     // 그냥 self 를 리턴하는데 struct 라 복제본이 넘어오는 개념일 듯.
+    // makeIterator() 명시적으로 적어 놓는 것도 나쁘지 않은 것 같다.
 
     struct CounterCompact: Sequence, IteratorProtocol {
         typealias Element = Int
 
         let limit: Element
         var current = 0
+
+        func makeIterator() -> Self {
+            return self
+        }
 
         mutating func next() -> Element? {
             guard current < limit else { return nil }
