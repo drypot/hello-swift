@@ -58,7 +58,7 @@ struct SequenceMakingTests {
         }
     }
 
-    @Test func testCounterIterator() throws {
+    @Test func testCounter() throws {
         let counter = Counter(limit: 3)
         var iterator = counter.makeIterator()
 
@@ -68,7 +68,7 @@ struct SequenceMakingTests {
         #expect(iterator.next() == nil)
     }
 
-    @Test func testCounterFor() throws {
+    @Test func testCounterWithFor() throws {
         let counter = Counter(limit: 3)
         var result = [Int]()
 
@@ -79,9 +79,8 @@ struct SequenceMakingTests {
         #expect(result == [0, 1, 2])
     }
 
-    @Test func testCounterCompactIterator() throws {
+    @Test func testCounterCompact() throws {
         let counter = CounterCompact(limit: 3)
-
         var iterator = counter.makeIterator()
 
         #expect(iterator.next() == 0)
@@ -90,14 +89,22 @@ struct SequenceMakingTests {
         #expect(iterator.next() == nil)
     }
 
-    @Test func testtestCounterCompactFor() throws {
-        let counter = CounterCompact(limit: 3)
-        var result = [Int]()
-
-        for count in counter {
-            result.append(count)
+    @Test func testClosureCounter() throws {
+        func makeCounter(limit: Int) -> AnyIterator<Int> {
+            var current = 0
+            return AnyIterator {
+                guard current < limit else { return nil }
+                defer { current += 1 }
+                return current
+            }
         }
 
-        #expect(result == [0, 1, 2])
+        let counter = makeCounter(limit: 3)
+        let iterator = counter.makeIterator()
+
+        #expect(iterator.next() == 0)
+        #expect(iterator.next() == 1)
+        #expect(iterator.next() == 2)
+        #expect(iterator.next() == nil)
     }
 }
