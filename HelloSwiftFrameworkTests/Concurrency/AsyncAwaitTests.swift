@@ -22,32 +22,15 @@ import Testing
 // There’s no way to take a bottom-up approach,
 // because synchronous code can’t ever call asynchronous code.
 
-struct AsyncAwaitTests {
+fileprivate func fetchNames() async -> [String] {
+    return ["aaa", "bbb", "ccc"]
+}
 
-    func fetchNames() async -> [String] {
-        return ["aaa", "bbb", "ccc"]
-    }
+struct AsyncAwaitTests {
 
     @Test func testAsyncAwait() async throws {
         let names = await fetchNames()
         #expect(names == ["aaa", "bbb", "ccc"])
     }
-
-    @Test func testTaskYield() async throws {
-        let names = await fetchNames()
-        var copy = [String]()
-
-        for name in names {
-            copy.append(name)
-            await Task.yield()   // 의도적으로 suspension point 를 만들 수 있다.
-        }
-
-        #expect(copy == names)
-    }
-
-    @Test func testTaskSleep() async throws {
-        try await Task.sleep(for: .seconds(0.1))
-    }
-
 
 }

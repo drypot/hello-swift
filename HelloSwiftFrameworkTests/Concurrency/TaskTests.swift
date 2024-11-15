@@ -8,105 +8,114 @@
 import Testing
 
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency#Tasks-and-Task-Groups
+// https://developer.apple.com/documentation/swift/task
 
 // A task is a unit of work that can be run asynchronously as part of your program.
 // All asynchronous code runs as part of some task.
 // A task itself does only one thing at a time,
 // but when you create multiple tasks, Swift can schedule them to run simultaneously.
 
-// The async-let syntax implicitly creates a child task
-
-// Tasks are arranged in a hierarchy. ... this approach is called structured concurrency.
-
 struct TaskTests {
 
-    static func echoAsync(_ message: String) async -> String {
-        return message
-    }
+    // TaskGroup 을 사용해서 명시적으로 Task 트리 짜는 것을 structured concurrency 라고 부른다.
+    // 아래 처럼 TaskGroup 없이 단독 Task 생성해 쓰는 것을 unstructured task 라고 부른다.
 
-    @Test func testParallelWithAsyncLet() async throws {
-        async let first = TaskTests.echoAsync("abc")
-        async let second = TaskTests.echoAsync("123")
-        async let third = TaskTests.echoAsync("xyz")
+    // Task 는 caller 의 actor context 를 계승한다.
 
-        let echoes = await [first, second, third]
-
-        #expect(echoes == ["abc", "123", "xyz"])
-    }
-
-    @Test func testParallelWithTaskGroup() async throws {
-        let echoes = await withTaskGroup(of: String.self) { group in
-            for message in ["abc", "123", "xyz"] {
-                group.addTask { await TaskTests.echoAsync(message) }
-            }
-
-            var echoes = [String]()
-
-            for await echo in group {
-                echoes.append(echo)
-            }
-
-            return echoes
+    @Test func testAwaitTaskValue() async throws {
+        let task = Task {
+            return "done"
         }
 
-        #expect(Set(echoes) == Set(["abc", "123", "xyz"]))
+        let value = await task.value
+
+        #expect(value == "done")
     }
 
-    @Test func testCheckCancellation() async throws {
-        let echoes = await withTaskGroup(of: String?.self) { group in
-            for message in ["abc", "123", "xyz"] {
-                let added = group.addTaskUnlessCancelled {
-                    guard !Task.isCancelled else { return nil }
-                    return await TaskTests.echoAsync(message)
-                }
-                guard added else { break }
-            }
+    // actor context 를 계승하지 않으려면 detached task 를 만든다.
 
-            var echoes = [String]()
-            for await echo in group {
-                if let echo {
-                    echoes.append(echo)
-                }
-            }
-            return echoes
+    @Test func testAwaitDetachedTaskValue() async throws {
+        let task = Task.detached {
+            return "done"
         }
 
-        #expect(Set(echoes) == Set(["abc", "123", "xyz"]))
+        let value = await task.value
+
+        #expect(value == "done")
     }
 
-    @Test func testCancelationHandler() async throws {
-        let echo = await withTaskCancellationHandler(
-            operation: {
-                await TaskTests.echoAsync("abc")
-            },
-            onCancel: {
-                //
+    @Test func testAwaitTaskResult() async throws {
+        let task = Task {
+            return "done"
+        }
+
+        let result = await task.result
+
+        #expect(result == .success("done"))
+    }
+
+    @Test func testIsCancelled() async throws {
+        let task = Task {
+            return if Task.isCancelled {
+                "cancelled"
+            } else {
+                "done"
             }
-        )
-
-        #expect(echo == "abc")
-    }
-
-    // unstructured task:  task that doesn’t have a parent task.
-
-    @Test func testTask() async throws {
-        let task1 = Task {
-            await TaskTests.echoAsync("abc")
         }
 
-        let echo = await task1.value
-        #expect(echo == "abc")
+        task.cancel()
+        let value = await task.value
+
+        #expect(value == "cancelled")
     }
 
-    // a detached task: unstructured task that’s not part of the current actor.
-
-    @Test func testDetachedTask() async throws {
-        let task1 = Task.detached {
-            await TaskTests.echoAsync("abc")
+    @Test func testTryCheckCancellationWithValue() async throws {
+        let task = Task<String, Error> {
+            try Task.checkCancellation()
+            return "done"
         }
 
-        let echo = await task1.value
-        #expect(echo == "abc")
+        do {
+            task.cancel()
+            let _ = try await task.value
+            fatalError()
+        } catch {
+            #expect(error is CancellationError)
+        }
     }
 
+    @Test func testTryCheckCancellationWithResult() async throws {
+        let task = Task<String, Error> {
+            try Task.checkCancellation()
+            return "done"
+        }
+
+        task.cancel()
+        let result = await task.result
+
+        switch result {
+        case .success:
+            fatalError()
+        case .failure(let error):
+            #expect(error is CancellationError)
+        }
+    }
+
+    @Test func testTaskYield() async throws {
+        let task = Task {
+            for _ in 0..<2 {
+                await Task.yield()   // 의도적으로 suspension point 를 만들 수 있다.
+            }
+            return "done"
+        }
+
+        let value = await task.value
+
+        #expect(value == "done")
+    }
+
+    @Test func testTaskSleep() async throws {
+        try await Task.sleep(for: .milliseconds(10))
+    }
+    
 }
