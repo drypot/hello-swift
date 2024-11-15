@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+// https://developer.apple.com/documentation/swift/asyncsequence
+
 struct AsyncSequenceTests {
 
     struct AsyncCounter: AsyncSequence {
