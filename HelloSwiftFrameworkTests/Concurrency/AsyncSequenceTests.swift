@@ -33,17 +33,6 @@ struct AsyncSequenceTests {
         }
     }
 
-    @Test func testAsyncCounter() async throws {
-        let counter = AsyncCounter(limit: 3)
-        var result = [Int]()
-
-        for await count in counter {
-            result.append(count)
-        }
-
-        #expect(result == [0, 1, 2])
-    }
-
     struct AsyncCounterCompact: AsyncSequence, AsyncIteratorProtocol {
         typealias Element = Int
 
@@ -61,8 +50,18 @@ struct AsyncSequenceTests {
         }
     }
 
-    @Test func testAsyncCounterCompact() async throws {
-        let counter = AsyncCounterCompact(limit: 3)
+    @Test func testAsyncCounter() async throws {
+        let counter = AsyncCounter(limit: 3)
+        var iterator = counter.makeAsyncIterator()
+
+        #expect((await iterator.next()) == 0)
+        #expect((await iterator.next()) == 1)
+        #expect((await iterator.next()) == 2)
+        #expect((await iterator.next()) == nil)
+    }
+
+    @Test func testAsyncCounterWithFor() async throws {
+        let counter = AsyncCounter(limit: 3)
         var result = [Int]()
 
         for await count in counter {
@@ -70,6 +69,16 @@ struct AsyncSequenceTests {
         }
 
         #expect(result == [0, 1, 2])
+    }
+
+    @Test func testAsyncCounterCompact() async throws {
+        let counter = AsyncCounterCompact(limit: 3)
+        var iterator = counter.makeAsyncIterator()
+
+        #expect((await iterator.next()) == 0)
+        #expect((await iterator.next()) == 1)
+        #expect((await iterator.next()) == 2)
+        #expect((await iterator.next()) == nil)
     }
     
 }
