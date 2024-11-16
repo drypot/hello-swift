@@ -11,8 +11,8 @@ import Testing
 // https://developer.apple.com/documentation/swift/asyncstream
 
 // AsyncStream conforms to AsyncSequence,
-// providing a convenient way to create an asynchronous sequence
-// without manually implementing an asynchronous iterator.
+// AsyncStream 은 asynchronous sequence 간편하게 만들고 싶을 때 사용한다.
+// AsyncStream 을 쓰면 asynchronous iterator 구현할 필요가 없어진다.
 
 struct AsyncStreamTests {
 
