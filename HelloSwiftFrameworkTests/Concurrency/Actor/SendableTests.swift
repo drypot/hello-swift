@@ -38,6 +38,7 @@ struct SendableTests {
                 continuation.resume(returning: result)
             }
         }
+        _ = result
     }
 
 }

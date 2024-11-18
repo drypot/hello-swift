@@ -51,10 +51,11 @@ struct OptionalTests {
     }
 
     @Test func testNilCoalescingOperator() throws {
-        #expect(Int("42") ?? Int(0) == 42)
-        #expect(Int("xx") ?? Int(0) == 0)
-        #expect(Int("xx") ?? Int("42") ?? Int(0) == 42)
-        #expect(Int("xx") ?? Int("xx") ?? Int(0) == 0)
+        // 컴파일할 때 시간 많이 걸린다는 경고가 떠서 타입을 모두 입혔다.
+        #expect(Int("42") ?? Int(0) == Int(42))
+        #expect(Int("xx") ?? Int(0) == Int(0))
+        #expect(Int("xx") ?? Int("42") ?? Int(0) == Int(42))
+        #expect(Int("xx") ?? Int("xx") ?? Int(0) == Int(0))
     }
 
     @Test func testUnconditionalUnwrapping() throws {
