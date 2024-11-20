@@ -49,6 +49,7 @@
 		001054332CEC98A5005F84E9 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				_Utility/ActorLogger.swift,
 				_Utility/IntID.swift,
 			);
 			target = 005907322CBCDE5100B8698C /* HelloSwiftFrameworkTests */;
