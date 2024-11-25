@@ -15,7 +15,7 @@ import Testing
 struct MeasurementTests {
 
     @Test func testUnitDuration() throws {
-        let m1 = Measurement(value: 90, unit: UnitDuration.seconds)
+        let m1 = Measurement<UnitDuration>(value: 90, unit: .seconds)
         let m2 = m1.converted(to: .minutes)
 
         #expect(m1.value == 90)
@@ -28,8 +28,8 @@ struct MeasurementTests {
     }
 
     @Test func testArithmetic() throws {
-        let m1 = Measurement(value: 90, unit: UnitDuration.seconds)
-        let m2 = Measurement(value: 1, unit: UnitDuration.minutes)
+        let m1 = Measurement<UnitDuration>(value: 90, unit: .seconds)
+        let m2 = Measurement<UnitDuration>(value: 1, unit: .minutes)
 
         let sum = m1 + m2
         let diff = m1 - m2
