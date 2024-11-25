@@ -25,6 +25,8 @@ struct MeasurementFormatStyleTests {
             numberFormatStyle: nil
         )
 
+        #expect(m1.formatted(.measurement(width: .abbreviated)) == "90초")
+
         // width: .abbreviated
         #expect(m1.formatted(style) == "90 sec")
 
@@ -44,6 +46,9 @@ struct MeasurementFormatStyleTests {
             usage: .personHeight,
             numberFormatStyle: nil
         )
+
+        #expect(m1.formatted(.measurement(width: .abbreviated)) == "1.7m")
+        #expect(m1.formatted(.measurement(width: .abbreviated, usage: .personHeight)) == "173cm")
 
         // width: .abbreviated
         #expect(m1.formatted(style) == "173cm")
@@ -68,6 +73,8 @@ struct MeasurementFormatStyleTests {
             includesActualByteCount: true,
             locale: Locale(identifier: "en_US")
         )
+
+        #expect(m1.formatted(.measurement(width: .abbreviated)) == "128MB")
 
         #expect(m1.formatted(style) == "122.1 MB (128,000,000 bytes)")
 
