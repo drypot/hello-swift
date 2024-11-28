@@ -20,9 +20,7 @@ struct ObservableTests {
         }
     }
 
-    // 노출된 프로퍼티가 업데이트되면 onChange 가 호출되지만,
-
-    @Test func testOnChangeShouldBeCalled() async throws {
+    @Test func testWhenExposedPropertyChanged() async throws {
         let logger = SimpleLogger<Int>()
         let pet = Pet(name: "max", age: 7)
 
@@ -32,15 +30,13 @@ struct ObservableTests {
             logger.append(1)
         }
 
-        logger.append(2)
+        // 노출된 프로퍼티가 업데이트되면 onChange 가 호출된다.
         pet.name = "max juior"
 
-        #expect(logger.log() == [2, 1])
+        #expect(logger.log() == [1])
     }
 
-    // 노출되지 않은 프로퍼티가 업데이트되면 호출되지 않음을 확인,
-
-    @Test func testOnChangeShouldNotBeCalled() async throws {
+    @Test func testWhenNotExposedPropertyChanged() async throws {
         let logger = SimpleLogger<Int>()
         let pet = Pet(name: "max", age: 7)
 
@@ -50,15 +46,13 @@ struct ObservableTests {
             logger.append(1)
         }
 
-        logger.append(2)
+        // 노출되지 않은 프로퍼티가 업데이트되면 호출되지 않는다.
         pet.age = 2
 
-        #expect(logger.log() == [2])
+        #expect(logger.log() == [])
     }
 
-    // Observable 이 어레이 엘리먼트일 때, 다른 인자들과 상관없이 정상 작동함을 확인.
-
-    @Test func testOnChangeShouldBeCalledForArrayElement() async throws {
+    @Test func testWhenExposedElementChanged() async throws {
         let logger = SimpleLogger<Int>()
 
         let pets = [
@@ -72,13 +66,13 @@ struct ObservableTests {
             logger.append(1)
         }
 
-        logger.append(2)
+        // 엘리먼트가 Observable 일 때, 다른 인자들과 상관없이 정상 작동함을 확인.
         pets[0].name = "max juior"
 
-        #expect(logger.log() == [2, 1])
+        #expect(logger.log() == [1])
     }
 
-    @Test func testOnChangeShouldNotBeCalledForArrayElement() async throws {
+    @Test func testWhenNotExposedElementChanged() async throws {
         let logger = SimpleLogger<Int>()
 
         let pets = [
@@ -92,10 +86,10 @@ struct ObservableTests {
             logger.append(1)
         }
 
-        logger.append(2)
+        // 노출되지 않은 엘리먼트가 업데이트 되면, 호출되지 않는다.
         pets[1].name = "ace juior"
 
-        #expect(logger.log() == [2])
+        #expect(logger.log() == [])
     }
 
 }

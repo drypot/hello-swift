@@ -36,151 +36,167 @@ struct ObservableArrayTests {
         var observableProducts: [ObservableProduct] = []
     }
 
-    @Test func testObservableArrayOfValues() async throws {
+    @Test func testValueElement() async throws {
+        let logger = SimpleLogger<Int>()
+
+        let products = Products()
+        products.valueProducts.append(Product(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.valueProducts
+        } onChange: {
+            logger.append(1)
+        }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
+        products.valueProducts.append(Product(name: "Item2"))
 
-        await confirmation { confirm in
-            let products = Products()
-            products.valueProducts.append(Product(name: "Item1"))
+        #expect(logger.log() == [1])
+    }
 
-            withObservationTracking {
-                _ = products.valueProducts
-            } onChange: {
-                confirm()
-            }
+    @Test func testValueElement2() async throws {
+        let logger = SimpleLogger<Int>()
 
-            products.valueProducts.append(Product(name: "Item2"))
+        let products = Products()
+        products.valueProducts.append(Product(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.valueProducts
+        } onChange: {
+            logger.append(1)
         }
 
         // 밸류 엘리먼트 변화에 onChange 가 호출된다.
+        products.valueProducts[0].name = "Item1Ver2"
 
-        await confirmation { confirm in
-            let products = Products()
-            products.valueProducts.append(Product(name: "Item1"))
+        #expect(logger.log() == [1])
+    }
 
-            withObservationTracking {
-                _ = products.valueProducts
-            } onChange: {
-                confirm()
-            }
+    @Test func testValueElement3() async throws {
+        let logger = SimpleLogger<Int>()
 
-            products.valueProducts[0].name = "Item1Ver2"
+        let products = Products()
+        products.valueProducts.append(Product(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.valueProducts
+        } onChange: {
+            logger.append(1)
         }
 
         // 업데이트가 여러번 발생해도 onChange 는 한번만 호출된다.
+        products.valueProducts.append(Product(name: "Item2"))
+        products.valueProducts.append(Product(name: "Item3"))
+        products.valueProducts.append(Product(name: "Item4"))
 
-        await confirmation(expectedCount: 1) { confirm in
-            let products = Products()
-            products.valueProducts.append(Product(name: "Item1"))
-
-            withObservationTracking {
-                _ = products.valueProducts
-            } onChange: {
-                confirm()
-            }
-
-            products.valueProducts.append(Product(name: "Item2"))
-            products.valueProducts.append(Product(name: "Item3"))
-            products.valueProducts.append(Product(name: "Item4"))
-        }
+        #expect(logger.log() == [1])
     }
 
-    @Test func testObservableArrayOfObjects() async throws {
+    @Test func testReferenceElement1() async throws {
+        let logger = SimpleLogger<Int>()
+
+        let products = Products()
+        products.refProducts.append(RefProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.refProducts
+        } onChange: {
+            logger.append(1)
+        }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
+        products.refProducts.append(RefProduct(name: "Item2"))
 
-        await confirmation { confirm in
-            let products = Products()
-            products.refProducts.append(RefProduct(name: "Item1"))
+        #expect(logger.log() == [1])
+    }
 
-            withObservationTracking {
-                _ = products.refProducts
-            } onChange: {
-                confirm()
-            }
+    @Test func testReferenceElement2() async throws {
+        let logger = SimpleLogger<Int>()
 
-            products.refProducts.append(RefProduct(name: "Item2"))
+        let products = Products()
+        products.refProducts.append(RefProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.refProducts
+        } onChange: {
+            logger.append(1)
         }
 
         // 오브젝트 엘리먼트에 대한 업데이트엔 onChange 가 발생하지 않는다.
+        products.refProducts[0].name = "Item1Ver2"
 
-        await confirmation(expectedCount: 0) { confirm in
-            let products = Products()
-            products.refProducts.append(RefProduct(name: "Item1"))
-
-            withObservationTracking {
-                _ = products.refProducts
-            } onChange: {
-                confirm()
-            }
-
-            products.refProducts[0].name = "Item1Ver2"
-        }
-
-        await confirmation(expectedCount: 0) { confirm in
-            let products = Products()
-            products.refProducts.append(RefProduct(name: "Item1"))
-
-            withObservationTracking {
-                let product = products.refProducts[0]
-                _ = product.name
-            } onChange: {
-                confirm()
-            }
-
-            products.refProducts[0].name = "Item1Ver2"
-        }
-
+        #expect(logger.log() == [])
     }
 
-    @Test func testObservableArrayOfObservableObjects() async throws {
+    @Test func testReferenceElement3() async throws {
+        let logger = SimpleLogger<Int>()
+
+        let products = Products()
+        products.refProducts.append(RefProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.refProducts[0].name
+        } onChange: {
+            logger.append(1)
+        }
+
+        products.refProducts[0].name = "Item1Ver2"
+
+        #expect(logger.log() == [])
+    }
+
+    @Test func testObservableElement1() async throws {
+        let logger = SimpleLogger<Int>()
+
+        let products = Products()
+        products.observableProducts.append(ObservableProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.observableProducts
+        } onChange: {
+            logger.append(1)
+        }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
+        products.observableProducts.append(ObservableProduct(name: "Item2"))
 
-        await confirmation { confirm in
-            let products = Products()
-            products.observableProducts.append(ObservableProduct(name: "Item1"))
+        #expect(logger.log() == [1])
+    }
 
-            withObservationTracking {
-                _ = products.observableProducts
-            } onChange: {
-                confirm()
-            }
+    @Test func testObservableElement2() async throws {
+        let logger = SimpleLogger<Int>()
 
-            products.observableProducts.append(ObservableProduct(name: "Item2"))
+        let products = Products()
+        products.observableProducts.append(ObservableProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.observableProducts
+        } onChange: {
+            logger.append(1)
         }
 
         // 오브젝트 엘리먼트에 대한 업데이트엔 onChange 가 발생하지 않는다.
+        products.observableProducts[0].name = "Item1Ver2"
 
-        await confirmation(expectedCount: 0) { confirm in
-            let products = Products()
-            products.observableProducts.append(ObservableProduct(name: "Item1"))
+        #expect(logger.log() == [])
+    }
 
-            withObservationTracking {
-                _ = products.observableProducts
-            } onChange: {
-                confirm()
-            }
+    @Test func testObservableElement3() async throws {
+        let logger = SimpleLogger<Int>()
 
-            products.observableProducts[0].name = "Item1Ver2"
+        let products = Products()
+        products.observableProducts.append(ObservableProduct(name: "Item1"))
+
+        withObservationTracking {
+            _ = products.observableProducts[0].name
+        } onChange: {
+            logger.append(1)
         }
 
         // 오브젝트 엘리먼트를 구체적으로 노출시켜주면 onChange 가 발생한다.
+        products.observableProducts[0].name = "Item1Ver2"
 
-        await confirmation { confirm in
-            let products = Products()
-            products.observableProducts.append(ObservableProduct(name: "Item1"))
-
-            withObservationTracking {
-                let product = products.observableProducts[0]
-                _ = product.name
-            } onChange: {
-                confirm()
-            }
-
-            products.observableProducts[0].name = "Item1Ver2"
-        }
-
+        #expect(logger.log() == [1])
     }
+    
 }
