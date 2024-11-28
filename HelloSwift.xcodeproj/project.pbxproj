@@ -46,14 +46,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		001054332CEC98A5005F84E9 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				_Utility/ActorLogger.swift,
-				_Utility/IntID.swift,
-			);
-			target = 005907322CBCDE5100B8698C /* HelloSwiftFrameworkTests */;
-		};
 		0014BA0D2CD9958700556F05 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwift" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -65,6 +57,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
 				HelloSwiftFramework.h,
+			);
+			target = 005907292CBCDE5100B8698C /* HelloSwiftFramework */;
+		};
+		009BF61C2CF8B24500B38480 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwiftFramework" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				_Utility/ActorLogger.swift,
+				_Utility/IntID.swift,
 			);
 			target = 005907292CBCDE5100B8698C /* HelloSwiftFramework */;
 		};
@@ -80,7 +80,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				0059073F2CBCDE5100B8698C /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFramework" target */,
-				001054332CEC98A5005F84E9 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */,
 			);
 			path = HelloSwiftFramework;
 			sourceTree = "<group>";
@@ -89,6 +88,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				0014BA0D2CD9958700556F05 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwift" target */,
+				009BF61C2CF8B24500B38480 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwiftFramework" target */,
 			);
 			path = HelloSwiftFrameworkTests;
 			sourceTree = "<group>";
