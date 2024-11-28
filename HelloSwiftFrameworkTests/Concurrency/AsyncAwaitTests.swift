@@ -8,11 +8,11 @@
 import Foundation
 import Testing
 
-fileprivate func fetchValue() async -> Int {
-    return 10
-}
-
 struct AsyncAwaitTests {
+
+    func fetchValue() async -> Int {
+        return 10
+    }
 
     @Test func testAsyncAwait() async throws {
 
