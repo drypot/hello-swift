@@ -17,28 +17,117 @@ import Testing
 
 struct DispatchQueueTests {
 
-    @Test func testDispatchGroup() throws {
+    @Test func testSerialQueue() throws {
         let logger = SimpleLogger<Int>()
 
+        // DispatchQueue.main 은 Serial Queue 이다.
+        // DispatchQueue.global() 은 Concurrent Queue 이다.
+
+        // 특별한 옵션 없이 큐를 생성하면 Serial Queue 가 만들어 진다.
+
+        let queue = DispatchQueue(label: "com.example.serialQueue")
         let group = DispatchGroup()
 
-        logger.append(1)
+        group.enter()
+        queue.async {
+            logger.append(1)
+            group.leave()
+        }
 
         group.enter()
-        DispatchQueue.global().async {
+        queue.async {
             logger.append(2)
             group.leave()
         }
 
-        logger.append(3)
+        group.enter()
+        DispatchQueue.global().async {
+            logger.append(3)
+            group.leave()
+        }
 
-        // 비동기 블럭이 복수개 실행됐을 때 모두를 기다리는데 유용하다.
+        // DispatchQueue 실행 완료를 기다리는데 몇 가지 방법들이 있는데
+        // DispatchGroup 쓰는 것이 그나마 무난해 보인다.
+
+        // DispatchGroup 은 큐와 상관없이 그냥 자기 혼자 카운팅만 하고 있는 것 같다.
+        // wait() 하면 group.leave() 가 모두 실행될 때까지 기다린다.
 
         group.wait()
 
-        logger.append(4)
+        #expect(logger.log() == [1, 2, 3])
+    }
 
-        #expect(logger.log() == [1, 3, 2, 4])
+    @Test func testCallMainQueue() throws {
+        let logger = SimpleLogger<Int>()
+
+        let group = DispatchGroup()
+
+        group.enter()
+        DispatchQueue.global().async {
+
+            // global 큐에서 실행된 결과를 main 큐에 반영하려면
+            // global 큐 안에서 main.async 를 부른다고 한다.
+
+            DispatchQueue.main.async {
+                logger.append(1)
+                group.leave()
+            }
+        }
+
+        group.wait()
+
+        #expect(logger.log() == [1])
+    }
+
+    @Test func testDispatchQueueSync() async throws {
+
+        // 리소스 접근을 DispatchQueue.sync 로 동기화할 수도 있다.
+
+        final class SyncObject: Sendable {
+            nonisolated(unsafe) var _value = 0
+            let queue = DispatchQueue(label: "com.example.testDispatchQueueSync")
+
+            var value: Int {
+                get {
+                    queue.sync { _value }
+                }
+                set(newValue) {
+                    queue.sync { _value = newValue }
+                }
+            }
+
+            func increase() {
+                queue.sync {
+                    _value += 1
+                }
+            }
+        }
+
+        let syncObject = SyncObject()
+
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            syncObject.increase()
+        }
+
+        #expect(syncObject.value == 10)
+    }
+
+    @Test func testWorkItem() throws {
+        let logger = SimpleLogger<Int>()
+
+        let workItem = DispatchWorkItem {
+            logger.append(1)
+        }
+
+        // WorkItem 을 만들어서 큐에 넣고 wait 하는 방법도 있다.
+        // WorkItem 을 queue 에 넣지 않은 채로 wait 해 봤더니 행이 걸린다;
+        // 꼭 넣어야 한다;
+
+        DispatchQueue.global().async(execute: workItem)
+
+        workItem.wait()
+
+        #expect(logger.log() == [1])
     }
 
     @Test func testSemaphore() throws {
@@ -46,61 +135,33 @@ struct DispatchQueueTests {
 
         let semaphore = DispatchSemaphore(value: 0)
 
-        logger.append(1)
-
         DispatchQueue.global().async {
-            logger.append(2)
+            logger.append(1)
+            // count 를 1 올린다.
             semaphore.signal()
         }
-
-        logger.append(3)
 
         // 비동기 블럭을 한 개만 실행하고 기다리는데 유용하다.
         // 아니면 공용 리소스 n 개중 남는 것이 나올 때까지 대기할 때.
 
+        // count 0 이면 + 가 될 때까지 기다린다.
+        // count + 이면 1 내리고 진행한다.
         semaphore.wait()
 
-        logger.append(4)
-
-        #expect(logger.log() == [1, 3, 2, 4])
+        #expect(logger.log() == [1])
     }
 
     @Test func testContinuation() async throws {
         let logger = SimpleLogger<Int>()
 
-        logger.append(1)
-
         await withCheckedContinuation { continuation in
-            logger.append(2)
             DispatchQueue.global().async {
-                logger.append(3)
+                logger.append(1)
                 continuation.resume()
             }
-            logger.append(4)
         }
 
-        logger.append(5)
-
-        #expect(logger.log() == [1, 2, 4, 3, 5])
-    }
-
-    @Test func testDispatchQueueSync() async throws {
-        let logger = SimpleLogger<Int>()
-
-        let queue = DispatchQueue(label: "testDispatchQueueSync")
-        var value = 0
-
-        logger.append(1)
-
-        // 리소스 접근을 DispatchQueue.sync 로 동기화할 수도 있다.
-        queue.sync {
-            logger.append(2)
-            value += 1
-        }
-
-        logger.append(3)
-
-        #expect(logger.log() == [1, 2, 3])
+        #expect(logger.log() == [1])
     }
 
 }
