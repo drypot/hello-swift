@@ -17,49 +17,44 @@ import Testing
 
 struct TaskTests {
 
-    // TaskGroup 을 사용해서 명시적으로 Task 트리 짜는 것을 structured concurrency 라고 부른다.
-    // 아래 처럼 TaskGroup 없이 단독 Task 생성해 쓰는 것을 unstructured task 라고 부른다.
+    @Test func testTask() async throws {
 
-    // Task 는 caller 의 actor context 를 계승한다.
+        // TaskGroup 을 사용해서 명시적으로 Task 트리 짜는 것을 structured concurrency 라고 부른다.
+        // 아래 처럼 TaskGroup 없이 단독 Task 생성해 쓰는 것을 unstructured task 라고 부른다.
+        // Task 는 caller 의 actor context 를 계승한다.
 
-    @Test func testAwaitTaskValue() async throws {
-        let task = Task {
+        let value = await Task {
             return "done"
-        }
-
-        let value = await task.value
+        }.value
 
         #expect(value == "done")
     }
 
-    // actor context 를 계승하지 않으려면 detached task 를 만든다.
-
     @Test func testAwaitDetachedTaskValue() async throws {
-        let task = Task.detached {
-            return "done"
-        }
 
-        let value = await task.value
+        // actor context 를 계승하지 않으려면 detached task 를 만든다.
+
+        let value = await Task.detached {
+            return "done"
+        }.value
 
         #expect(value == "done")
     }
 
     @Test func testAwaitTaskResult() async throws {
-        let task = Task {
+        let result = await Task {
             return "done"
-        }
-
-        let result = await task.result
+        }.result
 
         #expect(result == .success("done"))
     }
 
-    @Test func testIsCancelled() async throws {
+    @Test func testCancelled() async throws {
         let task = Task {
-            return if Task.isCancelled {
-                "cancelled"
+            if Task.isCancelled {
+                return "cancelled"
             } else {
-                "done"
+                return "done"
             }
         }
 
@@ -69,22 +64,23 @@ struct TaskTests {
         #expect(value == "cancelled")
     }
 
-    @Test func testTryCheckCancellationWithValue() async throws {
-        let task = Task<String, Error> {
-            try Task.checkCancellation()
-            return "done"
-        }
-
+    @Test func testCheckCancellation() async throws {
         do {
+            let task = Task<String, Error> {
+                try Task.checkCancellation()
+                return "done"
+            }
+
             task.cancel()
             let _ = try await task.value
+
             fatalError()
         } catch {
             #expect(error is CancellationError)
         }
     }
 
-    @Test func testTryCheckCancellationWithResult() async throws {
+    @Test func testCheckCancellationResult() async throws {
         let task = Task<String, Error> {
             try Task.checkCancellation()
             return "done"
@@ -102,16 +98,26 @@ struct TaskTests {
     }
 
     @Test func testTaskYield() async throws {
-        let task = Task {
+        let logger = SimpleLogger<Int>()
+
+        let task1 = Task {
             for _ in 0..<2 {
-                await Task.yield()   // 의도적으로 suspension point 를 만들 수 있다.
+                logger.append(1)
+                await Task.yield()
             }
-            return "done"
         }
 
-        let value = await task.value
+        let task2 = Task {
+            for _ in 0..<2 {
+                logger.append(2)
+                await Task.yield()
+            }
+        }
 
-        #expect(value == "done")
+        await task1.value
+        await task2.value
+
+        #expect(logger.log() == [1, 2, 1, 2])
     }
 
     @Test func testTaskSleep() async throws {

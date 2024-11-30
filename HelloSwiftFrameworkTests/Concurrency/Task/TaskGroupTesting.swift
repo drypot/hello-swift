@@ -11,11 +11,8 @@ import Testing
 // https://developer.apple.com/documentation/swift/taskgroup
 
 // The async-let syntax implicitly creates a child task
-// Tasks are arranged in a hierarchy. ... this approach is called structured concurrency.
-
-fileprivate func echoAsync(_ message: String) async -> String {
-    return message
-}
+// Tasks are arranged in a hierarchy. ...
+// this approach is called structured concurrency.
 
 fileprivate func identityAsync(_ number: Int) async -> Int {
     return number
@@ -23,8 +20,7 @@ fileprivate func identityAsync(_ number: Int) async -> Int {
 
 struct TaskGroupTesting {
 
-    @Test func testAwaitAsyncLet() async throws {
-
+    @Test func testAsyncLet() async throws {
         async let first = identityAsync(10)
         async let second = identityAsync(20)
         async let third = identityAsync(30)
@@ -34,7 +30,13 @@ struct TaskGroupTesting {
         #expect(numbers == [10, 20, 30])
     }
 
-    @Test func testAwaitTaskGroup() async throws {
+    @Test func testTaskGroup() async throws {
+
+        // group 을 만들려면 아래 함수들을 용도에 맞게 쓴다.
+        // withTaskGroup,
+        // withThrowingTaskGroup,
+        // withDiscardingTaskGroup,
+        // withThrowingDiscardingTaskGroup
 
         let sum = await withTaskGroup(of: Int.self) { group in
 
@@ -61,7 +63,7 @@ struct TaskGroupTesting {
         #expect(sum == 60)
     }
 
-    @Test func testAwaitTaskGroupWithReduce() async throws {
+    @Test func testTaskGroupReduce() async throws {
 
         let sum = await withTaskGroup(of: Int.self) { group in
             group.addTask {
@@ -80,17 +82,12 @@ struct TaskGroupTesting {
         #expect(sum == 60)
     }
 
-    @Test func testCheckCancellation() async throws {
+    @Test func testCancelled() async throws {
 
-        // group 을 만들려면 아래 함수들을 용도에 맞게 쓴다.
-        // withTaskGroup,
-        // withThrowingTaskGroup,
-        // withDiscardingTaskGroup,
-        // withThrowingDiscardingTaskGroup
-
-        let sum = await withTaskGroup(of: Int?.self) { group in // Optional 타입을 넣어준다.
-
-            for number in [10, 20, 30] {
+        let lastNumber = await withTaskGroup(of: Int?.self) { group in
+            var lastNumber = 0
+            for number in [10, 20, 30, 40, 50] {
+                lastNumber = number
                 guard !group.isCancelled else { break }
                 group.addTask {
                     guard !Task.isCancelled else { return nil }
@@ -101,10 +98,10 @@ struct TaskGroupTesting {
                 }
             }
 
-            return await group.reduce(0) { $0 + ($1 ?? 0) }
+            return lastNumber
         }
 
-        #expect(sum < 60)
+        #expect(lastNumber == 30)
     }
 
 }
