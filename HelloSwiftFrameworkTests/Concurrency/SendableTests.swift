@@ -30,45 +30,42 @@ import Testing
 // but it does have semantic requirements that Swift enforces.
 
 // Value types
-// Reference types with no mutable storage
-// Reference types that internally manage access to their state
-// Functions and closures (by marking them with @Sendable)
+// Actor types
+// Immutable classes
+// Internally-synchronized class
+// @Sendable function types
 
 struct SendableTests {
 
-    @Test func testValue() async throws {
-        var value = 10
+    @Test func testSendable() async throws {
 
-        let result = await Task {
-            let result = value + 20
-            value += 10
-            return result
-        }.value
+        actor Box {
+            var intType = 10
 
-        DispatchQueue.concurrentPerform(iterations: 10) { _ in
-            value += 1
-        }
+            var arrayType = [1, 2, 3]
 
-        #expect(value == 20)
-        #expect(result == 30)
-    }
-    
-    // 클로져 타입 선언할 때 @Sendable 넣을 수 있다.
-    // @Sendable 클로저는 클로저 내에서 캡처된 변수나 참조 타입을 변경할 수 없다.
-    func fetchData(completion: @Sendable @escaping (Result<String, Error>) -> Void) {
-        DispatchQueue.global().async {
-            completion(.success("abc"))
-        }
-    }
+            actor ActorType { }
+            var actorType = ActorType()
 
-    @Test func test() async throws {
-        // 여기선 필요없지만, 클로저 정의할 때 인자 앞에 @Sendable 넣을 수 있다.
-        let result = await withCheckedContinuation { continuation in
-            fetchData { @Sendable result in
-                continuation.resume(returning: result)
+            final class SendableClass: Sendable { }
+            var sendableClass = SendableClass()
+
+            final class NonisolatedClass: Sendable {
+                nonisolated(unsafe) var name = "max"
             }
+            var nonisolatedClass = NonisolatedClass()
+
+            var sendableFunction = { @Sendable in 10 }
         }
-        _ = result
+
+        let box = Box()
+
+        _ = await box.intType
+        _ = await box.arrayType
+        _ = await box.actorType
+        _ = await box.sendableClass
+        _ = await box.nonisolatedClass
+        _ = await box.sendableFunction
     }
 
 }
