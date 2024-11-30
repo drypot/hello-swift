@@ -75,7 +75,7 @@ import Foundation
 // Actor 를 명시적으로 적어주던지
 // @preconcurrency 로 이미 Actor 로 격리되고 있음을 선언하던지,
 // nonisolated(unsafe) 적어서 검사를 무시하던지,
-// 정말 원하는 액터에서 실행되고 있는지는 MainActor.assumeIsoated { ... } 로 확인할 수 있다.
+// 정말 원하는 액터에서 실행되고 있는지는 MainActor.assumeIsolated { ... } 로 확인할 수 있다.
 
 // Protect mutable state with Swift actors
 // https://developer.apple.com/videos/play/wwdc2021/10133
