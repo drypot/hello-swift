@@ -9,31 +9,37 @@ import Foundation
 import Combine
 import Testing
 
+// https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
+// https://stackoverflow.com/questions/64290068/why-does-the-combine-publisher-protocol-have-receives-and-subscribes-with-id
+
 struct CustomPublisherTests {
 
-    struct CustomPublisher: Publisher {
-        typealias Output = Int
-        typealias Failure = Never
+    struct CustomPublisher<Output, Failure: Error> : Publisher {
 
-        let values: [Int]
+        let values: [Output]
 
-        init(values: [Int]) {
+        init(values: [Output]) {
             self.values = values
         }
 
-        func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-            let subscription = CustomSubscription(subscriber: subscriber, values: values)
+        func receive<S>(subscriber: S)
+        where S: Subscriber, Failure == S.Failure, Output == S.Input {
+            let subscription = CustomPublisherSubscription(
+                subscriber: subscriber,
+                values: values
+            )
             subscriber.receive(subscription: subscription)
         }
     }
 
-    class CustomSubscription<S: Subscriber, Input>: Subscription where S.Input == Input {
+    class CustomPublisherSubscription<S, Output>: Subscription
+    where S: Subscriber, S.Input == Output {
         private var subscriber: S?
 
-        let values: [Input]
+        let values: [Output]
         var index = 0
 
-        init(subscriber: S, values: [Input]) {
+        init(subscriber: S, values: [Output]) {
             self.subscriber = subscriber
             self.values = values
         }
@@ -56,31 +62,38 @@ struct CustomPublisherTests {
         }
     }
 
-    struct CustomFilter<Upstream: Publisher>: Publisher {
-        typealias Output = Upstream.Output
+    struct CustomOperator<Upstream, Output>: Publisher
+    where Upstream: Publisher {
         typealias Failure = Upstream.Failure
 
         let upstream: Upstream
-        let filter: (Upstream.Output) -> Bool
+        let map: (Upstream.Output) -> Output
 
-        func receive<S>(subscriber: S) where S : Subscriber, Upstream.Failure == S.Failure, Upstream.Output == S.Input {
-            let subscription = CustomFilterSubscription(
+        init(upstream: Upstream, map: @escaping (Upstream.Output) -> Output) {
+            self.upstream = upstream
+            self.map = map
+        }
+
+        func receive<S>(subscriber: S)
+        where S: Subscriber, Output == S.Input, Failure == S.Failure {
+            let subscription = CustomOperatorSubscription(
                 subscriber: subscriber,
-                upstream: upstream,
-                filter: filter
+                map: map
             )
             upstream.subscribe(subscription)
         }
     }
 
-    private class CustomFilterSubscription<S: Subscriber, Upstream: Publisher>: Subscriber, Subscription where S.Input == Upstream.Output, S.Failure == Upstream.Failure {
+    class CustomOperatorSubscription<S, Input, Failure>: Subscriber, Subscription
+    where S: Subscriber, Failure: Error, S.Failure == Failure {
+
         private var subscriber: S?
-        private let filter: (Upstream.Output) -> Bool
+        private let map: (Input) -> S.Input
         private var subscription: Subscription?
 
-        init(subscriber: S, upstream: Upstream, filter: @escaping (Upstream.Output) -> Bool) {
+        init(subscriber: S, map: @escaping (Input) -> S.Input) {
             self.subscriber = subscriber
-            self.filter = filter
+            self.map = map
         }
 
         func receive(subscription: Subscription) {
@@ -88,20 +101,16 @@ struct CustomPublisherTests {
             subscriber?.receive(subscription: self)
         }
 
-        func receive(_ input: Upstream.Output) -> Subscribers.Demand {
-            if filter(input) {
-                return subscriber?.receive(input) ?? .none
-            } else {
-                return .none
-            }
-        }
-
-        func receive(completion: Subscribers.Completion<Upstream.Failure>) {
-            subscriber?.receive(completion: completion)
-        }
-
         func request(_ demand: Subscribers.Demand) {
             subscription?.request(demand)
+        }
+
+        func receive(_ input: Input) -> Subscribers.Demand {
+            return subscriber?.receive(map(input)) ?? .none
+        }
+
+        func receive(completion: Subscribers.Completion<Failure>) {
+            subscriber?.receive(completion: completion)
         }
 
         func cancel() {
@@ -109,12 +118,15 @@ struct CustomPublisherTests {
             subscriber = nil
         }
     }
-    
+
     class CustomSubscriber: Subscriber {
         typealias Input = Int
         typealias Failure = Never
 
         let logger = SimpleLogger<Int>()
+
+        init() {
+        }
 
         func receive(subscription: Subscription) {
             logger.append(-99)
@@ -134,20 +146,35 @@ struct CustomPublisherTests {
     @Test func testCustomPublisher() throws {
         let logger = SimpleLogger<Int>()
 
-        let _ = CustomPublisher(values: [1, 2, 3, 4, 5])
-            .sink { completion in
-                logger.append(99)
-            } receiveValue: { value in
-                logger.append(value)
-            }
+        let publisher = CustomPublisher<Int, Never>(values: [1, 2, 3, 4, 5])
+
+        let sink = Subscribers.Sink<Int, Never> { completion in
+            logger.append(99)
+        } receiveValue: { value in
+            logger.append(value)
+        }
+
+        publisher.subscribe(sink)
 
         #expect(logger.log() == [1, 2, 3, 4, 5, 99])
     }
 
     @Test func testCustomSubscriber() throws {
+        let publisher = CustomPublisher<Int, Never>(values: [1, 2, 3, 4, 5])
         let subscriber = CustomSubscriber()
-        CustomPublisher(values: [1, 2, 3, 4, 5]).subscribe(subscriber)
+
+        publisher.subscribe(subscriber)
 
         #expect(subscriber.logger.log() == [-99, 1, 2, 3, 4, 5, 99])
+    }
+
+    @Test func testCustomOperator() throws {
+        let publisher = CustomPublisher<Int, Never>(values: [1, 2, 3, 4, 5])
+        let operator_ = CustomOperator(upstream: publisher) { $0 * 2 }
+        let subscriber = CustomSubscriber()
+
+        operator_.subscribe(subscriber)
+
+        #expect(subscriber.logger.log() == [-99, 2, 4, 6, 8, 10, 99])
     }
 }
