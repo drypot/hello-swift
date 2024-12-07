@@ -193,4 +193,5 @@ struct PublishersTests {
 
         #expect(logger.log() == [10, 20, 30, 40])
     }
+
 }
