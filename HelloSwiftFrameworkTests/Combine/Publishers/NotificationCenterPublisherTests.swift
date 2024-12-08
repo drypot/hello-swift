@@ -18,12 +18,20 @@ struct NotificationCenterPublisherTests {
         let customNotification = Notification.Name("CustomNotification")
 
         NotificationCenter.default.publisher(for: customNotification)
-        .sink {
-            logger.append($0.userInfo?["mark"] as? Int ?? -99)
-        }
-        .store(in: &cancellables)
+            // compatMap 은 nil 값을 제외한다.
+            .compactMap { notification in
+                notification.userInfo?["mark"] as? Int
+            }
+            .sink { value in
+                logger.append(value)
+            }
+            .store(in: &cancellables)
 
-        NotificationCenter.default.post(name: customNotification, object: nil, userInfo: ["mark" : 99])
+        NotificationCenter.default.post(
+            name: customNotification,
+            object: nil,
+            userInfo: ["mark" : 99]
+        )
 
         #expect(logger.log() == [99])
     }

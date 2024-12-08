@@ -12,7 +12,7 @@ import Testing
 // https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
 // https://stackoverflow.com/questions/64290068/why-does-the-combine-publisher-protocol-have-receives-and-subscribes-with-id
 
-struct CustomPublisherTests {
+struct CustomCombineTests {
 
     struct CustomPublisher<Output, Failure: Error> : Publisher {
 
