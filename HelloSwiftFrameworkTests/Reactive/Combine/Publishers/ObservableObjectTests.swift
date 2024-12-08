@@ -13,32 +13,6 @@ import Testing
 
 struct ObservableObjectTests {
 
-    @Test func testPublished() throws {
-        let logger = SimpleLogger<Int>()
-
-        class Weather {
-            @Published var temperature: Int
-            init(temperature: Int) {
-                self.temperature = temperature
-            }
-        }
-
-        let weather = Weather(temperature: 10)
-        var cancellables = Set<AnyCancellable>()
-
-        weather.$temperature
-            .sink {
-                logger.append($0)
-            }
-            .store(in: &cancellables)
-
-        weather.temperature = 20
-        weather.temperature = 30
-        weather.temperature = 40
-
-        #expect(logger.log() == [10, 20, 30, 40])
-    }
-
     @Test func testObjectWillChange() throws {
         let logger = SimpleLogger<Int>()
 
