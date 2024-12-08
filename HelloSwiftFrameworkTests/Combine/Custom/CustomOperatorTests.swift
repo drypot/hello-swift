@@ -18,18 +18,18 @@ struct CustomOperatorTests {
         typealias Failure = Upstream.Failure
 
         let upstream: Upstream
-        let map: (Upstream.Output) -> Output
+        let transform: (Upstream.Output) -> Output?
 
-        init(upstream: Upstream, map: @escaping (Upstream.Output) -> Output) {
+        init(upstream: Upstream, transform: @escaping (Upstream.Output) -> Output) {
             self.upstream = upstream
-            self.map = map
+            self.transform = transform
         }
 
         func receive<S>(subscriber: S)
         where S: Subscriber, Output == S.Input, Failure == S.Failure {
             let subscription = CustomOperatorSubscription(
                 subscriber: subscriber,
-                map: map
+                transform: transform
             )
             upstream.subscribe(subscription)
         }
@@ -39,12 +39,12 @@ struct CustomOperatorTests {
     where S: Subscriber, Failure: Error, S.Failure == Failure {
 
         private var subscriber: S?
-        private let map: (Input) -> S.Input
+        private let transform: (Input) -> S.Input?
         private var subscription: Subscription?
 
-        init(subscriber: S, map: @escaping (Input) -> S.Input) {
+        init(subscriber: S, transform: @escaping (Input) -> S.Input?) {
             self.subscriber = subscriber
-            self.map = map
+            self.transform = transform
         }
 
         func receive(subscription: Subscription) {
@@ -57,7 +57,8 @@ struct CustomOperatorTests {
         }
 
         func receive(_ input: Input) -> Subscribers.Demand {
-            return subscriber?.receive(map(input)) ?? .none
+            guard let value = transform(input) else { return .none }
+            return subscriber?.receive(value) ?? .none
         }
 
         func receive(completion: Subscribers.Completion<Failure>) {
