@@ -11,6 +11,7 @@ import Testing
 
 // https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
 // https://stackoverflow.com/questions/64290068/why-does-the-combine-publisher-protocol-have-receives-and-subscribes-with-id
+// https://github.com/OpenCombine/OpenCombine
 
 struct CustomPublisherTests {
 
