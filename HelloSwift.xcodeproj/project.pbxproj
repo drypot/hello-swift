@@ -68,6 +68,13 @@
 			);
 			target = 005907292CBCDE5100B8698C /* HelloSwiftFramework */;
 		};
+		009BF8312D0721EC00B38480 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HTTPServer/SimpleHTTPServer.swift,
+			);
+			target = 005907322CBCDE5100B8698C /* HelloSwiftFrameworkTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -80,6 +87,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				0059073F2CBCDE5100B8698C /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFramework" target */,
+				009BF8312D0721EC00B38480 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */,
 			);
 			path = HelloSwiftFramework;
 			sourceTree = "<group>";
@@ -231,7 +239,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1610;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					005906F92CBCD9A800B8698C = {
 						CreatedOnToolsVersion = 16.0;
