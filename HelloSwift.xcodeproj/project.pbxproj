@@ -71,7 +71,7 @@
 		009BF8312D0721EC00B38480 /* Exceptions for "HelloSwiftFramework" folder in "HelloSwiftFrameworkTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				HTTPServer/SimpleHTTPServer.swift,
+				Network/SimpleHTTPServer.swift,
 			);
 			target = 005907322CBCDE5100B8698C /* HelloSwiftFrameworkTests */;
 		};
