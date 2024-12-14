@@ -9,147 +9,86 @@ import Foundation
 import Network
 import os
 
-public class MessageClient {
-    let clientConnection: MessageClientConnection
-    let host: NWEndpoint.Host
-    let port: NWEndpoint.Port
+public final class MessageClient: Sendable {
+
+    let id: Int
+    let connection: NWConnection
 
     public init(host: String, port: UInt16) {
-        self.host = NWEndpoint.Host(host)
-        self.port = NWEndpoint.Port(rawValue: port)!
-        let nwConnection = NWConnection(host: self.host, port: self.port, using: .tcp)
-        clientConnection = MessageClientConnection(connection: nwConnection)
+        self.id = messageConnectionIDGen.nextID()
+        let nwHost = NWEndpoint.Host(host)
+        let nwPort = NWEndpoint.Port(rawValue: port)!
+        self.connection = NWConnection(host: nwHost, port: nwPort, using: .tcp)
+    }
+
+    func log(_ message: String) {
+        print("client connection \(id): \(message)")
     }
 
     public func start() {
-        print("Client started \(host) \(port)")
-        clientConnection.didStopCallback = didStopCallback(error:)
-        clientConnection.start()
-    }
-
-    public func stop() {
-        clientConnection.stop()
-    }
-
-    public func send(data: Data) async throws {
-        try await clientConnection.send(data: data)
-    }
-
-    public func receive() async throws -> String? {
-        return try await clientConnection.receive()
-    }
-
-    func didStopCallback(error: Error?) {
-        if error == nil {
-            // exit(EXIT_SUCCESS)
-        } else {
-            // exit(EXIT_FAILURE)
-        }
-    }
-}
-
-final class MessageClientConnection: Sendable {
-    let connection: NWConnection
-
-    init(connection: NWConnection) {
-        self.connection = connection
-    }
-
-    nonisolated(unsafe) var didStopCallback: ((Error?) -> Void)? = nil
-
-    func start() {
-        print("connection will start")
-        connection.stateUpdateHandler = stateDidChange(to:)
-        //setupReceive()
-        connection.start(queue: .global())
-    }
-
-    @Sendable private func stateDidChange(to state: NWConnection.State) {
-        switch state {
-        case .waiting(let error):
-            connectionDidFail(error: error)
-        case .ready:
-            print("Client connection ready")
-        case .failed(let error):
-            connectionDidFail(error: error)
-        default:
-            break
-        }
-    }
-
-    func send(data: Data) async throws {
-        connection.send(content: data, completion: .contentProcessed( { error in
-            if let error {
-                self.connectionDidFail(error: error)
-                return
+        connection.stateUpdateHandler = { state in
+            switch state {
+            case .waiting(let error):
+                self.log("state, waiting, \(error)")
+                self.stop()
+            case .ready:
+                self.log("state, ready")
+            case .failed(let error):
+                self.log("state, failed, \(error)")
+                self.stop()
+            default:
+                self.log("state, \(state)")
+                break
             }
-            print("connection did send, data: \(data as NSData)")
-        }))
+        }
+        connection.start(queue: .global())
+        log("started")
     }
 
-    func receive() async throws -> String? {
+    public func send(_ message: String) async {
+        let data = message.data(using: .utf8)!
+        let error = await withCheckedContinuation { continuation in
+            connection.send(content: data, completion: .contentProcessed( { error in
+                continuation.resume(returning: error)
+            }))
+        }
+        if let error {
+            log("send error, \(error)")
+            stop()
+            return
+        }
+        log("sent, \(message)")
+    }
+
+    public func receive() async -> String {
         let (data, _, isComplete, error) = await withCheckedContinuation { continuation in
             connection.receive(minimumIncompleteLength: 1, maximumLength: connection.maximumDatagramSize ) {
                 continuation.resume(returning: ($0, $1, $2, $3))
             }
         }
-        if let error {
-            self.connectionDidFail(error: error)
-            return nil
-        }
+        var result = "empty data"
         if let data, !data.isEmpty {
-            let message = String(data: data, encoding: .utf8)
-            return message
-        }
-//        if isComplete {
-//            self.connectionDidEnd()
-//        } else {
-//            self.setupReceive()
-//        }
-        return "???"
-    }
-
-    private func setupReceive() {
-        connection.receive(
-            minimumIncompleteLength: 1,
-            maximumLength: connection.maximumDatagramSize
-        ) { (data, _, isComplete, error) in
-
-            if let data, !data.isEmpty {
-                let message = String(data: data, encoding: .utf8)
-                print("connection did receive, data: \(data as NSData) string: \(message ?? "-" )")
-            }
-            if isComplete {
-                self.connectionDidEnd()
-            } else if let error {
-                self.connectionDidFail(error: error)
+            if let message = String(data: data, encoding: .utf8) {
+                log("received, \(message)")
+                result = message
             } else {
-                self.setupReceive()
+                result = "parsing error"
             }
         }
-    }
-
-    func stop() {
-        print("connection will stop")
-        stop(error: nil)
-    }
-
-    private func connectionDidFail(error: Error) {
-        print("connection did fail, error: \(error)")
-        self.stop(error: error)
-    }
-
-    private func connectionDidEnd() {
-        print("connection did end")
-        self.stop(error: nil)
-    }
-
-    private func stop(error: Error?) {
-        self.connection.stateUpdateHandler = nil
-        self.connection.cancel()
-        if let didStopCallback {
-            self.didStopCallback = nil
-            didStopCallback(error)
+        if let error {
+            self.log("receive error, \(error)")
+            self.stop()
         }
+        if isComplete {
+            self.log("completed")
+            self.stop()
+        }
+        return result
+    }
+
+    public func stop() {
+        connection.stateUpdateHandler = nil
+        connection.cancel()
+        log("stopped")
     }
 }

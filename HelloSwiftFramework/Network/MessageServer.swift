@@ -13,6 +13,8 @@ import os
 // https://github.com/httpswift/swifter
 // https://ko9.org/posts/simple-swift-web-server/
 
+let messageConnectionIDGen = IntIDGenerator()
+
 public final class MessageServer: Sendable {
 
     let listener: NWListener
@@ -22,19 +24,24 @@ public final class MessageServer: Sendable {
         self.listener = try! NWListener(using: .tcp, on: nwPort)
     }
 
+    func log(_ message: String) {
+        print("server: \(message)")
+    }
+
     public func start() throws {
         // handler 클로져들에 [weak self] 넣어야 하는데 넣지않고,
         // 대신 close 메서드에서 nil 대입을 하고 있다.
         listener.stateUpdateHandler = { state in
             switch state {
             case .ready:
-                print("server state: ready on port \(self.listener.port!)")
+                self.log("state, ready on port \(self.listener.port!)")
             case .failed(let error):
-                print("server state: failed, error: \(error)")
+                self.log("state, failed, error: \(error)")
                 // exit(EXIT_FAILURE)
             case .cancelled:
-                print("server state: canceled")
+                self.log("state, canceled")
             default:
+                self.log("state, \(state)")
                 break
             }
         }
@@ -42,7 +49,7 @@ public final class MessageServer: Sendable {
             MessageServerConnection(connection: connection).start()
         }
         listener.start(queue: .global())
-        print("server started")
+        log("started")
     }
 
     public func stop() {
@@ -53,18 +60,17 @@ public final class MessageServer: Sendable {
 //            connection.stopHandler = nil
 //            connection.stop()
 //        }
+        log("stopped")
     }
 }
 
 final class MessageServerConnection: Sendable {
-    
-    private static let idGen = IntIDGenerator()
 
     let id: Int
     let connection: NWConnection
 
     init(connection: NWConnection) {
-        self.id = Self.idGen.nextID()
+        self.id = messageConnectionIDGen.nextID()
         self.connection = connection
     }
 
@@ -73,28 +79,37 @@ final class MessageServerConnection: Sendable {
     }
 
     func start() {
-        setupStateUpdateHandler()
-        setupReceiveHandler()
-        connection.start(queue: .global())
-        log("new")
-        send(data: "hello".data(using: .utf8)!)
-    }
-
-    private func setupStateUpdateHandler() {
         connection.stateUpdateHandler = { state in
             switch state {
             case .waiting(let error):
-                self.log("state, waiting, \(error.localizedDescription)")
-                self.close()
+                self.log("state, waiting, \(error)")
+                self.stop()
             case .ready:
                 self.log("state, ready")
             case .failed(let error):
-                self.log("state, failed, \(error.localizedDescription)")
-                self.close()
+                self.log("state, failed, \(error)")
+                self.stop()
             default:
+                self.log("state, \(state)")
                 break
             }
         }
+        setupReceiveHandler()
+        connection.start(queue: .global())
+        log("started")
+        send("hello")
+    }
+
+    func send(_ message: String) {
+        let data = message.data(using: .utf8)!
+        connection.send(content: data, completion: .contentProcessed( { error in
+            if let error {
+                self.log("send error, \(error)")
+                self.stop()
+                return
+            }
+            self.log("sent, \(message)")
+        }))
     }
 
     private func setupReceiveHandler() {
@@ -103,37 +118,28 @@ final class MessageServerConnection: Sendable {
             maximumLength: connection.maximumDatagramSize
         ) { data, _, isComplete, error in
 
-            if let data, !data.isEmpty {
-                self.log("received, \(data.count) bytes")
-                self.send(data: data)
+            if let data, let message = String(data: data, encoding: .utf8) {
+                self.log("received, \(message)")
+                self.send(message)
+            }
+            if let error {
+                self.log("receive error, \(error)")
+                self.stop()
+                return
             }
             if isComplete {
                 self.log("completed")
-                self.close()
-            } else if let error {
-                self.log("receive error, \(error.localizedDescription)")
-                self.close()
-            } else {
-                self.setupReceiveHandler()
+                self.stop()
+                return
             }
+            self.setupReceiveHandler()
         }
     }
 
-    private func send(data: Data) {
-        connection.send(content: data, completion: .contentProcessed( { error in
-            if let error {
-                self.log("failed to send, \(error)")
-                self.close()
-                return
-            }
-            self.log("sent \(data.count) bytes")
-        }))
-    }
-
-    private func close() {
+    func stop() {
         connection.stateUpdateHandler = nil
         connection.cancel()
-        self.log("closed")
+        log("stopped")
     }
 
 }
