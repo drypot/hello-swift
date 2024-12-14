@@ -15,7 +15,7 @@ public final class MessageClient: Sendable {
     let connection: NWConnection
 
     public init(host: String, port: UInt16) {
-        self.id = messageConnectionIDGen.nextID()
+        self.id = connectionIDGen.nextID()
         let nwHost = NWEndpoint.Host(host)
         let nwPort = NWEndpoint.Port(rawValue: port)!
         self.connection = NWConnection(host: nwHost, port: nwPort, using: .tcp)
@@ -45,21 +45,6 @@ public final class MessageClient: Sendable {
         log("started")
     }
 
-    public func send(_ message: String) async {
-        let data = message.data(using: .utf8)!
-        let error = await withCheckedContinuation { continuation in
-            connection.send(content: data, completion: .contentProcessed( { error in
-                continuation.resume(returning: error)
-            }))
-        }
-        if let error {
-            log("send error, \(error)")
-            stop()
-            return
-        }
-        log("sent, \(message)")
-    }
-
     public func receive() async -> String {
         let (data, _, isComplete, error) = await withCheckedContinuation { continuation in
             connection.receive(minimumIncompleteLength: 1, maximumLength: connection.maximumDatagramSize ) {
@@ -84,6 +69,21 @@ public final class MessageClient: Sendable {
             self.stop()
         }
         return result
+    }
+
+    public func send(_ message: String) async {
+        let data = message.data(using: .utf8)!
+        let error = await withCheckedContinuation { continuation in
+            connection.send(content: data, completion: .contentProcessed( { error in
+                continuation.resume(returning: error)
+            }))
+        }
+        if let error {
+            log("send error, \(error)")
+            stop()
+            return
+        }
+        log("sent, \(message)")
     }
 
     public func stop() {

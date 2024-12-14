@@ -10,14 +10,12 @@ import Network
 import os
 
 // https://rderik.com/blog/building-a-server-client-aplication-using-apple-s-network-framework/
-// https://github.com/httpswift/swifter
-// https://ko9.org/posts/simple-swift-web-server/
 
-let messageConnectionIDGen = IntIDGenerator()
+let connectionIDGen = IntIDGenerator()
 
 public final class MessageServer: Sendable {
 
-    let listener: NWListener
+    private let listener: NWListener
 
     public init(port: UInt16) {
         let nwPort = NWEndpoint.Port(rawValue: port)!
@@ -56,10 +54,6 @@ public final class MessageServer: Sendable {
         self.listener.stateUpdateHandler = nil
         self.listener.newConnectionHandler = nil
         self.listener.cancel()
-//        for connection in self.serverConnectionsByID.withLock({ $0.values }) {
-//            connection.stopHandler = nil
-//            connection.stop()
-//        }
         log("stopped")
     }
 }
@@ -70,7 +64,7 @@ final class MessageServerConnection: Sendable {
     let connection: NWConnection
 
     init(connection: NWConnection) {
-        self.id = messageConnectionIDGen.nextID()
+        self.id = connectionIDGen.nextID()
         self.connection = connection
     }
 
@@ -100,18 +94,6 @@ final class MessageServerConnection: Sendable {
         send("hello")
     }
 
-    func send(_ message: String) {
-        let data = message.data(using: .utf8)!
-        connection.send(content: data, completion: .contentProcessed( { error in
-            if let error {
-                self.log("send error, \(error)")
-                self.stop()
-                return
-            }
-            self.log("sent, \(message)")
-        }))
-    }
-
     private func setupReceiveHandler() {
         connection.receive(
             minimumIncompleteLength: 1,
@@ -134,6 +116,18 @@ final class MessageServerConnection: Sendable {
             }
             self.setupReceiveHandler()
         }
+    }
+
+    func send(_ message: String) {
+        let data = message.data(using: .utf8)!
+        connection.send(content: data, completion: .contentProcessed( { error in
+            if let error {
+                self.log("send error, \(error)")
+                self.stop()
+                return
+            }
+            self.log("sent, \(message)")
+        }))
     }
 
     func stop() {
