@@ -11,24 +11,50 @@ import Network
 // https://github.com/httpswift/swifter
 // https://ko9.org/posts/simple-swift-web-server/
 
-public final class SimpleHTTPServer: Sendable {
+public protocol SimpleHTTPRouter: Sendable {
+    func route(request: SimpleHTTPRequest, response: SimpleHTTPResponse)
+}
+
+public final class SimpleHTTPServer<Router>: Sendable
+    where Router: SimpleHTTPRouter {
 
     private let listener: NWListener
+    private let router: Router
 
-    public init(port: UInt16) {
+    public var port: UInt16? { listener.port?.rawValue }
+
+    public init(port: UInt16, router: Router) {
         let nwPort = NWEndpoint.Port(rawValue: port)!
         self.listener = try! NWListener(using: .tcp, on: nwPort)
+        self.router = router
     }
 
     func log(_ message: String) {
         print("web server: \(message)")
     }
 
-    public func start() throws {
-        listener.newConnectionHandler = { connection in
-            SimpleHTTPServerConnection(connection: connection).start()
+    public func start() async throws {
+        await withCheckedContinuation { continuation in
+            listener.stateUpdateHandler = { state in
+                switch state {
+                case .ready:
+                    self.log("state, ready on port \(self.listener.port!)")
+                    continuation.resume()
+                case .failed(let error):
+                    self.log("state, failed, error: \(error)")
+                    // exit(EXIT_FAILURE)
+                case .cancelled:
+                    self.log("state, canceled")
+                default:
+                    self.log("state, \(state)")
+                    break
+                }
+            }
+            listener.newConnectionHandler = { connection in
+                SimpleHTTPServerConnection(connection: connection, router: self.router).start()
+            }
+            listener.start(queue: .global())
         }
-        listener.start(queue: .global())
         log("started")
     }
 
@@ -41,15 +67,18 @@ public final class SimpleHTTPServer: Sendable {
 
 }
 
-final class SimpleHTTPServerConnection: Sendable {
+final class SimpleHTTPServerConnection<Router>: Sendable
+    where Router: SimpleHTTPRouter {
 
     let id: Int
     let connection: NWConnection
+    let router: Router
     nonisolated(unsafe) var request: SimpleHTTPRequest?
 
-    init(connection: NWConnection) {
+    init(connection: NWConnection, router: Router) {
         self.id = connectionIDGen.nextID()
         self.connection = connection
+        self.router = router
     }
 
     func log(_ message: String) {
@@ -81,13 +110,16 @@ final class SimpleHTTPServerConnection: Sendable {
                 } else {
                     self.request!.appendToBody(data)
                 }
+                guard let request = self.request else { fatalError() }
                 var length = 0
-                if let contentLength = self.request!.headers["Content-Length"] {
+                if let contentLength = request.headers["Content-Length"] {
                     length = Int(contentLength)!
                 }
-                if self.request!.body.count >= length {
-                    self.log("request arrived, \(self.request!.path)")
-                    self.route()
+                if request.body.count >= length {
+                    self.log("request arrived, \(request.path)")
+                    let response = SimpleHTTPResponse()
+                    self.router.route(request: request, response: response)
+                    self.connection.send(content: response.responseData(), completion: .idempotent)
                     self.request = nil
                 }
             }
@@ -98,32 +130,6 @@ final class SimpleHTTPServerConnection: Sendable {
                 self.receive()
             }
         }
-    }
-
-    private func route() {
-        guard let request else { return }
-        switch request.path {
-        case "/echo":
-            let message = String(data: request.body, encoding: .utf8)!
-            self.respond(message)
-        case "/abc":
-            self.respond("abc")
-        default:
-            self.respond("invalid page")
-        }
-    }
-
-    private func respond(_ message: String) {
-        let headers = [
-            "Content-Type: text/plain"
-        ]
-        let response = SimpleHTTPResponse(
-            status: 200,
-            reason: "OK",
-            headers: headers,
-            body: message.data(using: .utf8)!
-        )
-        connection.send(content: response.data(), completion: .idempotent)
     }
 
     func stop() {

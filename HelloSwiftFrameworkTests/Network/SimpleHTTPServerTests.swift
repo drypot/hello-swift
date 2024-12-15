@@ -11,19 +11,37 @@ import HelloSwiftFramework
 
 struct SimpleHTTPServerTests {
 
+    final class Router: SimpleHTTPRouter {
+        func route(request: SimpleHTTPRequest, response: SimpleHTTPResponse) {
+            response.headers = [
+                "Content-Type: text/plain"
+            ]
+
+            switch request.path {
+            case "/echo":
+                response.body = request.body
+            case "/abc":
+                response.bodyString = "abc"
+            default:
+                response.bodyString = "invalid page"
+            }
+        }
+    }
+
     @Test func testGet() async throws {
-        let server = SimpleHTTPServer(port: 8080)
-        try server.start()
+        let server = SimpleHTTPServer(port: 0, router: Router())
+        try await server.start()
+        let port = server.port!
 
         do {
-            let url = URL(string: "http://localhost:8080/abc")!
+            let url = URL(string: "http://localhost:\(port)/abc")!
             let (data, _) = try await URLSession.shared.data(from: url)
             let content = String(data: data, encoding: .utf8)
 
             #expect(content! == "abc")
         }
         do {
-            let url = URL(string: "http://localhost:8080/echo")!
+            let url = URL(string: "http://localhost:\(port)/echo")!
 
             var request = URLRequest(url: url)
             request.httpMethod = "POST"

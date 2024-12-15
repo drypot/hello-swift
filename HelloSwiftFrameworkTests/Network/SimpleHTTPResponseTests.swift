@@ -12,11 +12,12 @@ import Testing
 struct SimpleHTTPResponseTests {
 
     @Test func test() throws {
-        let headers = [
+        let response = SimpleHTTPResponse()
+
+        response.headers = [
             "Content-Type: text/plain"
         ]
-        let body = "hello".data(using: .utf8)!
-        let response = SimpleHTTPResponse(headers: headers, body: body)
+        response.bodyString = "hello"
 
         let expected = """
             HTTP/1.1 200 OK\r
@@ -26,8 +27,7 @@ struct SimpleHTTPResponseTests {
             hello
             """
 
-        let responseString = String(data:response.data(), encoding: .utf8)!
-        #expect(responseString == expected)
+        #expect(response.responseString() == expected)
     }
 
 }

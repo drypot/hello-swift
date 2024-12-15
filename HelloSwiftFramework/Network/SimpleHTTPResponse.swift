@@ -9,19 +9,29 @@ import Foundation
 
 // https://ko9.org/posts/simple-swift-web-server/
 
-public struct SimpleHTTPResponse {
-    public let httpVersion: String
-    public let status: Int
-    public let reason: String
-    public let headers: [String]
-    public let body: Data
+public final class SimpleHTTPResponse {
+    public var httpVersion: String
+    public var status: Int
+    public var reason: String
+    public var headers: [String]
+    public var body: Data?
+
+    public var bodyString: String? {
+        get {
+            guard let body else { return nil }
+            return String(data: body, encoding: .utf8)
+        }
+        set {
+            body = newValue?.data(using: .utf8)
+        }
+    }
 
     public init(
         httpVersion: String = "HTTP/1.1",
         status: Int = 200,
         reason: String = "OK",
-        headers: [String],
-        body: Data) {
+        headers: [String] = [],
+        body: Data? = nil) {
 
         self.httpVersion = httpVersion
         self.status = status
@@ -30,16 +40,24 @@ public struct SimpleHTTPResponse {
         self.body = body
     }
 
-    public func data() -> Data {
+    public func responseData() -> Data {
         let statusLine = "\(httpVersion) \(status) \(reason)"
 
         var lines = [statusLine]
         lines.append(contentsOf: headers)
-        lines.append("Content-Length: \(body.count)")
+        lines.append("Content-Length: \(body?.count ?? 0)")
         lines.append("")
         lines.append("")
-        let header = lines.joined(separator: "\r\n").data(using: .utf8)!
+        let headersData = lines.joined(separator: "\r\n").data(using: .utf8)!
 
-        return header + body
+        if let body {
+            return headersData + body
+        } else {
+            return headersData
+        }
+    }
+
+    public func responseString() -> String {
+        return String(data: responseData(), encoding: .utf8)!
     }
 }

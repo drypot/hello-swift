@@ -9,7 +9,7 @@ import Foundation
 
 // https://ko9.org/posts/simple-swift-web-server/
 
-public struct SimpleHTTPRequest {
+public final class SimpleHTTPRequest {
     public let method: String
     public let path: String
     public let httpVersion: String
@@ -19,6 +19,14 @@ public struct SimpleHTTPRequest {
     public var bodyString: String { String(data: body, encoding: .utf8)! }
 
     static let delimiter = "\r\n\r\n".data(using: .utf8)!
+
+    init(method: String, path: String, httpVersion: String, headers: [String : String], body: Data) {
+        self.method = method
+        self.path = path
+        self.httpVersion = httpVersion
+        self.headers = headers
+        self.body = body
+    }
 
     public static func parse(_ data: Data) -> SimpleHTTPRequest? {
         guard let range = data.firstRange(of: delimiter) else { return nil }
@@ -55,7 +63,7 @@ public struct SimpleHTTPRequest {
         )
     }
 
-    public mutating func appendToBody(_ data: Data) {
+    public func appendToBody(_ data: Data) {
         body.append(data)
     }
 
