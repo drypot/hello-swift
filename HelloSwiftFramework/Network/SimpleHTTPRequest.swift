@@ -14,38 +14,49 @@ public struct SimpleHTTPRequest {
     public let path: String
     public let httpVersion: String
     public let headers: [String: String]
+    public var body: Data
+
+    public var bodyString: String { String(data: body, encoding: .utf8)! }
+
+    static let delimiter = "\r\n\r\n".data(using: .utf8)!
 
     public static func parse(_ data: Data) -> SimpleHTTPRequest? {
-        let str = String(data: data, encoding: .utf8)!
-        let lines = str.components(separatedBy: "\r\n")
-        print(lines)
-        guard let firstLine = lines.first,
-              let lastLine = lines.last, lastLine.isEmpty else {
-            return nil
+        guard let range = data.firstRange(of: delimiter) else { return nil }
+        let headersData = data[0..<range.lowerBound]
+        let body = data[range.upperBound...]
+
+        let headersString = String(data: headersData, encoding: .utf8)!
+        let lines = headersString.components(separatedBy: "\r\n")
+
+        guard let firstLine = lines.first else { return nil }
+
+        let firstLineParts = firstLine.components(separatedBy: " ")
+        guard firstLineParts.count == 3 else { return nil }
+
+        let method = firstLineParts[0]
+        let path = firstLineParts[1].removingPercentEncoding!
+        let httpVersion = firstLineParts[2]
+
+        var headers = [String: String]()
+        for line in lines[1...] {
+            let parts = line.split(separator: ":", maxSplits: 1)
+            if parts.count != 2 { continue }
+            let key = String(parts[0])
+            let value = parts[1].trimmingCharacters(in: .whitespaces)
+            headers[key] = value
         }
-
-        let parts = firstLine.components(separatedBy: " ")
-        guard parts.count == 3 else {
-            return nil
-        }
-
-        let method = parts[0]
-        let path = parts[1].removingPercentEncoding!
-        let httpVersion = parts[2]
-
-        let headerPairs = lines.dropFirst()
-            .map { $0.split(separator: ":", maxSplits: 1) }
-            .filter { $0.count == 2 }
-            .map { ($0[0].lowercased(), $0[1].trimmingCharacters(in: .whitespaces)) }
-
-        let headers = Dictionary(headerPairs, uniquingKeysWith: { old, _ in old })
 
         return SimpleHTTPRequest(
             method: method,
             path: path,
             httpVersion: httpVersion,
-            headers: headers
+            headers: headers,
+            body: body
         )
+    }
+
+    public mutating func appendToBody(_ data: Data) {
+        body.append(data)
     }
 
 }

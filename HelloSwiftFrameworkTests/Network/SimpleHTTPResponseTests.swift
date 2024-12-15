@@ -26,7 +26,7 @@ struct SimpleHTTPResponseTests {
             hello
             """
 
-        let responseString = String(data:response.messageData, encoding: .utf8)!
+        let responseString = String(data:response.data(), encoding: .utf8)!
         #expect(responseString == expected)
     }
 

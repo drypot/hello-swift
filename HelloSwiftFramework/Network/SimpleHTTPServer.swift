@@ -45,7 +45,7 @@ final class SimpleHTTPServerConnection: Sendable {
 
     let id: Int
     let connection: NWConnection
-    nonisolated(unsafe) var buffer = Data()
+    nonisolated(unsafe) var request: SimpleHTTPRequest?
 
     init(connection: NWConnection) {
         self.id = connectionIDGen.nextID()
@@ -74,32 +74,56 @@ final class SimpleHTTPServerConnection: Sendable {
                 return
             }
             if let data {
-                self.buffer.append(data)
-                let message = String(data: self.buffer, encoding: .utf8)!
-                self.log("received\n---\n\(message)\n---")
-                self.respond("OK")
+                self.log("data arrived: \(data.count)")
+
+                if self.request == nil {
+                    self.request = SimpleHTTPRequest.parse(data)
+                } else {
+                    self.request!.appendToBody(data)
+                }
+                var length = 0
+                if let contentLength = self.request!.headers["Content-Length"] {
+                    length = Int(contentLength)!
+                }
+                if self.request!.body.count >= length {
+                    self.log("request arrived, \(self.request!.path)")
+                    self.route()
+                    self.request = nil
+                }
             }
             if isComplete {
                 self.log("completed")
-            } else  {
+            } else {
                 self.log("receive again")
                 self.receive()
             }
         }
     }
 
+    private func route() {
+        guard let request else { return }
+        switch request.path {
+        case "/echo":
+            let message = String(data: request.body, encoding: .utf8)!
+            self.respond(message)
+        case "/abc":
+            self.respond("abc")
+        default:
+            self.respond("invalid page")
+        }
+    }
+
     private func respond(_ message: String) {
-        let contentData = message.data(using: .utf8)!
-        let header = """
-            HTTP/1.1 200 OK
-            Content-Type: text/plain
-            Content-Length: \(contentData.count)
-            
-            
-            """
-        var responseData = header.data(using: .utf8)!
-        responseData.append(contentData)
-        connection.send(content: responseData, completion: .idempotent)
+        let headers = [
+            "Content-Type: text/plain"
+        ]
+        let response = SimpleHTTPResponse(
+            status: 200,
+            reason: "OK",
+            headers: headers,
+            body: message.data(using: .utf8)!
+        )
+        connection.send(content: response.data(), completion: .idempotent)
     }
 
     func stop() {

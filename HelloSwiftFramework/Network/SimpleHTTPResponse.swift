@@ -30,7 +30,7 @@ public struct SimpleHTTPResponse {
         self.body = body
     }
 
-    public var messageData: Data {
+    public func data() -> Data {
         let statusLine = "\(httpVersion) \(status) \(reason)"
 
         var lines = [statusLine]

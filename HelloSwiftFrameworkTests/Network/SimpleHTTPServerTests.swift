@@ -11,15 +11,29 @@ import HelloSwiftFramework
 
 struct SimpleHTTPServerTests {
 
-    @Test func test() async throws {
+    @Test func testGet() async throws {
         let server = SimpleHTTPServer(port: 8080)
         try server.start()
 
-        let url = URL(string: "http://localhost:8080/data")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let content = String(data: data, encoding: .utf8) ?? "decoding error"
+        do {
+            let url = URL(string: "http://localhost:8080/abc")!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let content = String(data: data, encoding: .utf8)
 
-        #expect(content == "OK")
+            #expect(content! == "abc")
+        }
+        do {
+            let url = URL(string: "http://localhost:8080/echo")!
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = "hello".data(using: .utf8)
+
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let content = String(data: data, encoding: .utf8)
+
+            #expect(content! == "hello")
+        }
 
         server.stop()
     }
