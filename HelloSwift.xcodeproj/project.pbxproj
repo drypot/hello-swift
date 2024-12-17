@@ -49,7 +49,7 @@
 		0014BA0D2CD9958700556F05 /* Exceptions for "HelloSwiftFrameworkTests" folder in "HelloSwift" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Collections/Protocols/SequenceProtocol/SequenceSelectingElementsTest.swift,
+				Foundation/Collections/Protocols/SequenceProtocol/SequenceSelectingElementsTest.swift,
 			);
 			target = 005906F92CBCD9A800B8698C /* HelloSwift */;
 		};
