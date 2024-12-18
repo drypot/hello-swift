@@ -19,14 +19,43 @@ struct FutureTests {
         // Future 클로져에서 작업이 끝나면 promise 를 콜해서 결과를 넘긴다.
         // Future 는 single value 만 생성하고 종료된다.
 
-        let _ = Future { promise in
-            promise(.success(10))
+        // Futures will run their closure immediately
+        // without waiting for a subscriber to be attached
+
+        let future = Future<_, Never> { promise in
+            logger.append(10)
+            promise(.success(99))
         }
-        .sink { value in
+
+        logger.append(20)
+
+        let _ = future.sink { value in
             logger.append(value)
         }
 
-        #expect(logger.log() == [10])
+        #expect(logger.log() == [10, 20, 99])
+    }
+
+    @Test func testDeferredFuture() throws {
+        let logger = SimpleLogger<Int>()
+
+        // Future 는 인자로 받은 closure 를 subscriber 를 기다리지 않고 바로 실행해 버린다.
+        // 해서 subscriber 를 기다리려면 Deferred 로 감싸야 한다.
+
+        let future = Deferred {
+            Future<_, Never> { promise in
+                logger.append(10)
+                promise(.success(99))
+            }
+        }
+
+        logger.append(20)
+
+        let _ = future.sink { value in
+            logger.append(value)
+        }
+
+        #expect(logger.log() == [20, 10, 99])
     }
 
     @Test func testFutureAwait() async throws {

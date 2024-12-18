@@ -17,7 +17,7 @@ struct RunLoopTests {
         // RunLoop 가동시키는 것이 무난해 보인다.
 
         // RunLoop.current.run()
-        
+
     }
 
 }
