@@ -31,4 +31,49 @@ struct KeyPathTests {
         #expect(pet[keyPath: agePath] == 12)
     }
 
+    @Test func testDynamicMemberLookup() throws {
+
+        @dynamicMemberLookup
+        struct DynamicStruct {
+            let dictionary = ["someDynamicMember": 1,
+                              "someOtherMember": 2]
+            subscript(dynamicMember member: String) -> Int {
+                return dictionary[member] ?? 3
+            }
+        }
+
+        let s = DynamicStruct()
+
+        do {
+            #expect(s.someDynamicMember == 1)
+            #expect(s.someOtherMember == 2)
+            #expect(s.xyz == 3)
+        }
+
+        do {
+            #expect(s[dynamicMember: "someDynamicMember"] == 1)
+            #expect(s[dynamicMember: "someOtherMember"] == 2)
+            #expect(s[dynamicMember: "xyz"] == 3)
+        }
+    }
+
+    @Test func testDynamicMemberLookupWithKeyPath() throws {
+
+        struct Point { var x, y: Int }
+
+        @dynamicMemberLookup
+        struct PassthroughWrapper<Value> {
+            var value: Value
+            subscript<T>(dynamicMember member: KeyPath<Value, T>) -> T {
+                get { return value[keyPath: member] }
+            }
+        }
+
+        let point = Point(x: 10, y: 20)
+        let wrapper = PassthroughWrapper(value: point)
+
+        #expect(wrapper.x == 10)
+        #expect(wrapper.y == 20)
+    }
+
 }
