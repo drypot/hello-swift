@@ -15,6 +15,10 @@ struct DateFormatTests {
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testFactoryVariable() throws {
+
+        // https://developer.apple.com/documentation/foundation/date/formatstyle/3798884-datetime
+        // dateTime: A factory variable used as a base for custom date format styles.
+
         let string = date1410.formatted(.dateTime.year().month().day())
         #expect(string == "2024년 10월 24일")
     }
@@ -35,10 +39,9 @@ struct DateFormatTests {
     }
 
     @Test func testKR() throws {
-        let style = Date.FormatStyle(
-            locale: Locale(identifier: "ko_KR"),
-            timeZone: TimeZone(identifier: "Asia/Seoul")!
-        )
+        var style = Date.FormatStyle()
+        style.locale = Locale(identifier: "ko_KR")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         #expect(style.format(date1410) == "2024. 10. 24. 오후 5:30")
 
@@ -48,10 +51,9 @@ struct DateFormatTests {
     }
 
     @Test func testUS() throws {
-        let style = Date.FormatStyle(
-            locale: Locale(identifier: "en_US"),
-            timeZone: TimeZone(identifier: "Asia/Seoul")!
-        )
+        var style = Date.FormatStyle()
+        style.locale = Locale(identifier: "en_US")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         #expect(style.format(date1410) == "10/24/2024, 5:30 PM")
 
@@ -64,10 +66,9 @@ struct DateFormatTests {
     }
 
     @Test func testCN() throws {
-        let style = Date.FormatStyle(
-            locale: Locale(identifier: "zh_CN"),
-            timeZone: TimeZone(identifier: "Asia/Seoul")!
-        )
+        var style = Date.FormatStyle()
+        style.locale = Locale(identifier: "zh_CN")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         #expect(style.format(date1410) == "2024/10/24 17:30")
 
@@ -78,10 +79,9 @@ struct DateFormatTests {
 
 
     @Test func testJP() throws {
-        let style = Date.FormatStyle(
-            locale: Locale(identifier: "ja_JP"),
-            timeZone: TimeZone(identifier: "Asia/Seoul")!
-        )
+        var style = Date.FormatStyle()
+        style.locale = Locale(identifier: "ja_JP")
+        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
         #expect(style.format(date1410) == "2024/10/24 17:30")
 
