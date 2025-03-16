@@ -1,5 +1,5 @@
 //
-//  DurationUnitsFormatStyleTests.swift
+//  DurationUnitsFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/30/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-struct DurationUnitsFormatStyleTests {
+struct DurationUnitsFormatTests {
 
     @Test func testFactoryVariable() throws {
         let secondsRaw = 3*60*60 + 45*60 + 15 // 3:45:15

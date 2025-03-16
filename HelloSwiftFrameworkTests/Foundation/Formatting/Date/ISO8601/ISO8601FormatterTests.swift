@@ -1,5 +1,5 @@
 //
-//  ISO8601DateFormatterTests.swift
+//  ISO8601FormatterTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/25/24.
@@ -10,7 +10,7 @@ import Testing
 
 // In Swift, you can use Date.ISO8601FormatStyle rather than ISO8601DateFormatter.
 
-struct ISO8601DateFormatterTests {
+struct ISO8601FormatterTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900

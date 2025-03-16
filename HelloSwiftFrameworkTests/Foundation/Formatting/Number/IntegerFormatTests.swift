@@ -1,5 +1,5 @@
 //
-//  IntegerFormatStyleTests.swift
+//  IntegerFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-struct IntegerFormatStyleTests {
+struct IntegerFormatTests {
 
     @Test func testFactoryVariables() throws {
         #expect(12345.formatted() == "12,345")

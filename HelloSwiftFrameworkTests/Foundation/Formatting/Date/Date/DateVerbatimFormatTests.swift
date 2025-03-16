@@ -1,5 +1,5 @@
 //
-//  DateVerbatimFormatStyleTests.swift
+//  DateVerbatimFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -12,7 +12,7 @@ import Testing
 // https://developer.apple.com/documentation/foundation/date/formatstring
 // https://developer.apple.com/documentation/foundation/date/formatstring/stringinterpolation
 
-struct DateVerbatimFormatStyleTests {
+struct DateVerbatimFormatTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900

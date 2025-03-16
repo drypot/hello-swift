@@ -1,5 +1,5 @@
 //
-//  PercentFormatStyleTests.swift
+//  PercentFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 11/1/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-struct PercentFormatStyleTests {
+struct PercentFormatTests {
 
     @Test func testFactoryVariable() throws {
         #expect(12345.formatted(.percent) == "12,345%")

@@ -1,5 +1,5 @@
 //
-//  FloatingPointFormatStyleTests.swift
+//  FloatingPointFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -9,7 +9,7 @@ import Foundation
 import RegexBuilder
 import Testing
 
-struct FloatingPointFormatStyleTests {
+struct FloatingPointFormatTests {
 
     @Test func testFactoryVariable() throws {
         let number = 0.1

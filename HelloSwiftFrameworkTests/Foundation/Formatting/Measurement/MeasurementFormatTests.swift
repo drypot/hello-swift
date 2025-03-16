@@ -1,5 +1,5 @@
 //
-//  MeasurementFormatStyleTests.swift
+//  MeasurementFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -14,7 +14,7 @@ import Testing
 // https://developer.apple.com/documentation/foundation/measurement/formatstyle/3816386-usage
 // https://developer.apple.com/documentation/foundation/measurementformatunitusage
 
-struct MeasurementFormatStyleTests {
+struct MeasurementFormatTests {
 
     @Test func testUnitDuration() throws {
         let m1 = Measurement<UnitDuration>(value: 90, unit: .seconds)

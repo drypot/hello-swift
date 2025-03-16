@@ -1,5 +1,5 @@
 //
-//  DecimalFormatStyleTests.swift
+//  DecimalFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -12,7 +12,7 @@ import Testing
 
 // Decimal: Preferred for financial calculations, accounting, and other applications where precision is crucial.
 
-struct DecimalFormatStyleTests {
+struct DecimalFormatTests {
 
     @Test func testFactoryVariable() throws {
         let number:Decimal = 0.1

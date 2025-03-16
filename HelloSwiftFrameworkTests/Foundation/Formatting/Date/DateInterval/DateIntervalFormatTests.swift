@@ -1,5 +1,5 @@
 //
-//  DateIntervalFormatStyleTests.swift
+//  DateIntervalFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/25/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-struct DateIntervalFormatStyleTests {
+struct DateIntervalFormatTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900

@@ -1,5 +1,5 @@
 //
-//  CurrencyFormatStyleTests.swift
+//  CurrencyFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -10,7 +10,7 @@ import Testing
 
 // https://en.wikipedia.org/wiki/ISO_4217
 
-struct CurrencyFormatStyleTests {
+struct CurrencyFormatTests {
 
     @Test func testFactoryVariable() throws {
         #expect(12345.formatted(.currency(code: "KRW")) == "₩12,345")
