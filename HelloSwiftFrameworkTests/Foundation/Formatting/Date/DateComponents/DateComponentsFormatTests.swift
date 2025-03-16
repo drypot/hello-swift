@@ -12,86 +12,142 @@ struct DateComponentsFormatTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900
-    let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
+    let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testFactoryVariable() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
 
-        let next90min = date ..< calendar.date(byAdding: .minute, value: 90, to: date)!
+        let duration = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
-        #expect(next90min.formatted(.timeDuration) == "1:30:00")
+        #expect(duration.formatted(.timeDuration) == "1:30:00")
     }
 
-    @Test func testNext30days() throws {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = Locale(identifier: "ko_KR")
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+    @Test func test30days() throws {
+        let calendar = Calendar(identifier: .gregorian)
 
-        let next30days = date ..< calendar.date(byAdding: .day, value: 30, to: date)!
+        let days30 = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.calendar = calendar
-        style.locale = Locale(identifier: "ko_KR")
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: nil
+            )
 
-        #expect(next30days.formatted(style) == "4주 2일")
+            #expect(days30.formatted(style) == "4주 2일")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: [.day]
+            )
 
-        style.fields = [.day]
-        #expect(next30days.formatted(style) == "30일")
+            #expect(days30.formatted(style) == "30일")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: [.hour]
+            )
 
-        style.fields = [.hour]
-        #expect(next30days.formatted(style) == "720시간")
+            #expect(days30.formatted(style) == "720시간")
+        }
     }
 
-    @Test func testNext90Minutes() throws {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = Locale(identifier: "ko_KR")
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+    @Test func test90Minutes() throws {
+        let calendar = Calendar(identifier: .gregorian)
 
-        let next90min = date ..< calendar.date(byAdding: .minute, value: 90, to: date)!
+        let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.calendar = calendar
-        style.locale = Locale(identifier: "ko_KR")
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: nil
+            )
 
-        #expect(next90min.formatted(style) == "1시간 30분")
+            #expect(min90.formatted(style) == "1시간 30분")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: [.hour]
+            )
 
-        style.fields = [.hour]
-        #expect(next90min.formatted(style) == "1시간")
+            #expect(min90.formatted(style) == "1시간")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: [.minute]
+            )
 
-        style.fields = [.minute]
-        #expect(next90min.formatted(style) == "90분")
+            #expect(min90.formatted(style) == "90분")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated,
+                locale: Locale(identifier: "ko_KR"),
+                calendar: Calendar(identifier: .gregorian),
+                fields: [.hour, .minute]
+            )
 
-        style.fields = [.hour, .minute]
-        #expect(next90min.formatted(style) == "1시간 30분")
+            #expect(min90.formatted(style) == "1시간 30분")
+        }
     }
 
-    @Test func testNext90MinutesUSStyles() throws {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = Locale(identifier: "en_US")
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+    @Test func test90MinutesUS() throws {
+        let calendar = Calendar(identifier: .gregorian)
 
-        let next90min = date ..< calendar.date(byAdding: .minute, value: 90, to: date)!
+        let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.calendar = calendar
-        style.locale = Locale(identifier: "en_US")
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .abbreviated, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
+            )
 
-        style.style = .abbreviated
-        #expect(next90min.formatted(style) == "1 hr, 30 min")
+            #expect(min90.formatted(style) == "1 hr, 30 min")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .condensedAbbreviated, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
+            )
 
-        style.style = .condensedAbbreviated
-        #expect(next90min.formatted(style) == "1hr 30min")
+            #expect(min90.formatted(style) == "1hr 30min")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .narrow, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
+            )
 
-        style.style = .narrow
-        #expect(next90min.formatted(style) == "1h 30m")
+            #expect(min90.formatted(style) == "1h 30m")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .spellOut, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
+            )
 
-        style.style = .spellOut
-        #expect(next90min.formatted(style) == "one hour, thirty minutes")
+            #expect(min90.formatted(style) == "one hour, thirty minutes")
+        }
+        do {
+            let style = Date.ComponentsFormatStyle(
+                style: .wide, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
+            )
 
-        style.style = .wide
-        #expect(next90min.formatted(style) == "1 hour, 30 minutes")
+            #expect(min90.formatted(style) == "1 hour, 30 minutes")
+        }
     }
 
 }
