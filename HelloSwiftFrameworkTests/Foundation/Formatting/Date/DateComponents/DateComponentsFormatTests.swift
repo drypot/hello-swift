@@ -8,6 +8,11 @@
 import Foundation
 import Testing
 
+// Date.ComponentsFormatStyle
+// https://developer.apple.com/documentation/foundation/date/componentsformatstyle
+
+// A style for formatting a date interval in terms of specific date components.
+
 struct DateComponentsFormatTests {
 
     // 2024-10-24 08:30:10 +0000
@@ -15,11 +20,12 @@ struct DateComponentsFormatTests {
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testFactoryVariable() throws {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = Locale(identifier: "ko_KR")
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let calendar = Calendar(identifier: .gregorian)
 
         let duration = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
+
+        // https://developer.apple.com/documentation/foundation/formatstyle/3796538-timeduration
+        // timeDuration: A style for formatting a duration expressed as a range of dates.
 
         #expect(duration.formatted(.timeDuration) == "1:30:00")
     }
@@ -27,127 +33,64 @@ struct DateComponentsFormatTests {
     @Test func test30days() throws {
         let calendar = Calendar(identifier: .gregorian)
 
+        var style = Date.ComponentsFormatStyle(style: .abbreviated)
+        style.locale = Locale(identifier: "ko_KR")
+        style.calendar = calendar
+
         let days30 = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: nil
-            )
+        #expect(days30.formatted(style) == "4주 2일")
 
-            #expect(days30.formatted(style) == "4주 2일")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: [.day]
-            )
+        style.fields = [.day]
+        #expect(days30.formatted(style) == "30일")
 
-            #expect(days30.formatted(style) == "30일")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: [.hour]
-            )
-
-            #expect(days30.formatted(style) == "720시간")
-        }
+        style.fields = [.hour]
+        #expect(days30.formatted(style) == "720시간")
     }
 
     @Test func test90Minutes() throws {
         let calendar = Calendar(identifier: .gregorian)
 
+        var style = Date.ComponentsFormatStyle(style: .abbreviated)
+        style.locale = Locale(identifier: "ko_KR")
+        style.calendar = calendar
+
         let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: nil
-            )
+        #expect(min90.formatted(style) == "1시간 30분")
 
-            #expect(min90.formatted(style) == "1시간 30분")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: [.hour]
-            )
+        style.fields = [.hour]
+        #expect(min90.formatted(style) == "1시간")
 
-            #expect(min90.formatted(style) == "1시간")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: [.minute]
-            )
+        style.fields = [.minute]
+        #expect(min90.formatted(style) == "90분")
 
-            #expect(min90.formatted(style) == "90분")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated,
-                locale: Locale(identifier: "ko_KR"),
-                calendar: Calendar(identifier: .gregorian),
-                fields: [.hour, .minute]
-            )
-
-            #expect(min90.formatted(style) == "1시간 30분")
-        }
+        style.fields = [.hour, .minute]
+        #expect(min90.formatted(style) == "1시간 30분")
     }
 
     @Test func test90MinutesUS() throws {
         let calendar = Calendar(identifier: .gregorian)
 
+        var style = Date.ComponentsFormatStyle(style: .abbreviated)
+        style.locale = Locale(identifier: "en_US")
+        style.calendar = calendar
+
         let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .abbreviated, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
-            )
+        #expect(min90.formatted(style) == "1 hr, 30 min")
 
-            #expect(min90.formatted(style) == "1 hr, 30 min")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .condensedAbbreviated, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
-            )
+        style.style = .condensedAbbreviated
+        #expect(min90.formatted(style) == "1hr 30min")
 
-            #expect(min90.formatted(style) == "1hr 30min")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .narrow, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
-            )
+        style.style = .narrow
+        #expect(min90.formatted(style) == "1h 30m")
 
-            #expect(min90.formatted(style) == "1h 30m")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .spellOut, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
-            )
+        style.style = .spellOut
+        #expect(min90.formatted(style) == "one hour, thirty minutes")
 
-            #expect(min90.formatted(style) == "one hour, thirty minutes")
-        }
-        do {
-            let style = Date.ComponentsFormatStyle(
-                style: .wide, locale: Locale(identifier: "en_US"), calendar: Calendar(identifier: .gregorian)
-            )
-
-            #expect(min90.formatted(style) == "1 hour, 30 minutes")
-        }
+        style.style = .wide
+        #expect(min90.formatted(style) == "1 hour, 30 minutes")
     }
 
 }
