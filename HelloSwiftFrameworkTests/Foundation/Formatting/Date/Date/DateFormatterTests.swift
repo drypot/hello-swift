@@ -19,7 +19,7 @@ struct DateFormatterTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900
-    let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
+    let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testLocale() throws {
         var calendar = Calendar(identifier: .gregorian)
@@ -35,16 +35,16 @@ struct DateFormatterTests {
         formatter.timeStyle = .medium
 
         formatter.locale = Locale(identifier: "ko_KR")
-        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
+        #expect(formatter.string(from: date1410) == "2024. 10. 24. 오후 5:30:10")
 
         formatter.locale = Locale(identifier: "en_US")
-        #expect(formatter.string(from: date) == "Oct 24, 2024 at 5:30:10 PM")
+        #expect(formatter.string(from: date1410) == "Oct 24, 2024 at 5:30:10 PM")
 
         formatter.locale = Locale(identifier: "zh_CN")
-        #expect(formatter.string(from: date) == "2024年10月24日 17:30:10")
+        #expect(formatter.string(from: date1410) == "2024年10月24日 17:30:10")
 
         formatter.locale = Locale(identifier: "ja_JP")
-        #expect(formatter.string(from: date) == "2024/10/24 17:30:10")
+        #expect(formatter.string(from: date1410) == "2024/10/24 17:30:10")
     }
 
     @Test func testDateTimeStyle() throws {
@@ -59,19 +59,19 @@ struct DateFormatterTests {
 
         formatter.dateStyle = .short
         formatter.timeStyle = .short
-        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30")
+        #expect(formatter.string(from: date1410) == "2024. 10. 24. 오후 5:30")
 
         formatter.dateStyle = .medium
         formatter.timeStyle = .medium
-        #expect(formatter.string(from: date) == "2024. 10. 24. 오후 5:30:10")
+        #expect(formatter.string(from: date1410) == "2024. 10. 24. 오후 5:30:10")
 
         formatter.dateStyle = .long
         formatter.timeStyle = .long
-        #expect(formatter.string(from: date) == "2024년 10월 24일 오후 5시 30분 10초 GMT+9")
+        #expect(formatter.string(from: date1410) == "2024년 10월 24일 오후 5시 30분 10초 GMT+9")
 
         formatter.dateStyle = .full
         formatter.timeStyle = .full
-        #expect(formatter.string(from: date) == "2024년 10월 24일 목요일 오후 5시 30분 10초 대한민국 표준시")
+        #expect(formatter.string(from: date1410) == "2024년 10월 24일 목요일 오후 5시 30분 10초 대한민국 표준시")
     }
 
     // Date Format Patterns
@@ -95,7 +95,7 @@ struct DateFormatterTests {
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd 'at' HH:mm")
 
-            #expect(formatter.string(from: date) == "2024. 10. 24. 17:30")
+            #expect(formatter.string(from: date1410) == "2024. 10. 24. 17:30")
         }
 
         do {
@@ -108,7 +108,7 @@ struct DateFormatterTests {
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.dateFormat = "yyyy-MM-dd 'at' HH:mm"
 
-            #expect(formatter.string(from: date) == "2024-10-24 at 17:30")
+            #expect(formatter.string(from: date1410) == "2024-10-24 at 17:30")
         }
     }
 
@@ -131,7 +131,7 @@ struct DateFormatterTests {
             formatter.locale = Locale(identifier: "en_US_POSIX")
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
 
-            #expect(formatter.string(from: date) == "2024-10-24T08:30:10Z")
+            #expect(formatter.string(from: date1410) == "2024-10-24T08:30:10Z")
         }
     }
 
@@ -149,7 +149,7 @@ struct DateFormatterTests {
             formatter.dateStyle = .long
             formatter.timeStyle = .long
 
-            #expect(formatter.date(from: "2024년 10월 24일 오후 5시 30분 10초 GMT+9") == date)
+            #expect(formatter.date(from: "2024년 10월 24일 오후 5시 30분 10초 GMT+9") == date1410)
         }
 
         do {
@@ -159,7 +159,7 @@ struct DateFormatterTests {
             formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
             formatter.dateFormat = "yyyy-MM-dd 'at' HH:mm:ss"
 
-            #expect(formatter.date(from: "2024-10-24 at 17:30:10") == date)
+            #expect(formatter.date(from: "2024-10-24 at 17:30:10") == date1410)
         }
 
         do {
@@ -169,7 +169,7 @@ struct DateFormatterTests {
             formatter.timeZone = TimeZone(secondsFromGMT: 0)
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
 
-            #expect(formatter.date(from:"2024-10-24T08:30:10Z") == date)
+            #expect(formatter.date(from:"2024-10-24T08:30:10Z") == date1410)
         }
 
     }
