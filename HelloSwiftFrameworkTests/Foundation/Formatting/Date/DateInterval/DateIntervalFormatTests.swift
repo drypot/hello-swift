@@ -8,18 +8,21 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 struct DateIntervalFormatTests {
 
     // 2024-10-24 08:30:10 +0000
     // 2024-10-24 17:30:10 +0900
-    let date = Date(timeIntervalSinceReferenceDate: 751451410.0)
+    let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testFactoryVariable() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        let range = date ..< calendar.date(byAdding: .day, value: 30, to: date)!
+        let range = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
-        // https://developer.apple.com/documentation/foundation/date/intervalformatstyle/3796299-interval
+        // https://developer.apple.com/documentation/foundation/formatstyle/3796518-interval
         // interval: A convenience factory variable to use as a base for custom date interval format styles.
 
         #expect(range.formatted(.interval) == "2024. 10. 24. 오후 5:30 ~ 2024. 11. 23. 오후 5:30")
@@ -29,7 +32,7 @@ struct DateIntervalFormatTests {
     @Test func testPredefined() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        let range = date ..< calendar.date(byAdding: .day, value: 30, to: date)!
+        let range = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
         #expect(range.formatted() == "2024. 10. 24. 오후 5:30 ~ 2024. 11. 23. 오후 5:30")
 
@@ -42,7 +45,7 @@ struct DateIntervalFormatTests {
         #expect(range.formatted(date: .omitted, time: .standard)    == "2024. 10. 24. 오후 5:30:10 ~ 2024. 11. 23. 오후 5:30:10")
         #expect(range.formatted(date: .omitted, time: .complete)    == "2024. 10. 24. 오후 5시 30분 10초 GMT+9 ~ 2024. 11. 23. 오후 5시 30분 10초 GMT+9")
 
-        let range2 = date ..< calendar.date(byAdding: .hour, value: 3, to: date)!
+        let range2 = date1410 ..< calendar.date(byAdding: .hour, value: 3, to: date1410)!
 
         #expect(range2.formatted(date: .omitted, time: .shortened)   == "오후 5:30~8:30")
         #expect(range2.formatted(date: .omitted, time: .standard)    == "오후 5:30:10 ~ 오후 8:30:10")
@@ -52,12 +55,15 @@ struct DateIntervalFormatTests {
     @Test func testPredefined2() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        var style = Date.IntervalFormatStyle(date: .abbreviated, time: .shortened)
-        style.calendar = calendar
-        style.locale = Locale(identifier: "ko_KR")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.IntervalFormatStyle(
+            date: .abbreviated,
+            time: .shortened,
+            locale: Locale(identifier: "ko_KR"),
+            calendar: calendar,
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
 
-        let range = date ..< calendar.date(byAdding: .day, value: 30, to: date)!
+        let range = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
         #expect(range.formatted(style) == "2024년 10월 24일 오후 5:30 ~ 2024년 11월 23일 오후 5:30")
     }
@@ -65,13 +71,13 @@ struct DateIntervalFormatTests {
     @Test func testModifiers() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        var style = Date.IntervalFormatStyle()
-            .month(.wide).day().weekday(.short).hour(.conversationalTwoDigits(amPM: .wide))
-        style.calendar = calendar
-        style.locale = Locale(identifier: "ko_KR")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.IntervalFormatStyle(
+            locale: Locale(identifier: "ko_KR"),
+            calendar: calendar,
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        ).month(.wide).day().weekday(.short).hour(.conversationalTwoDigits(amPM: .wide))
 
-        let range = date ..< calendar.date(byAdding: .day, value: 30, to: date)!
+        let range = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
         #expect(range.formatted(style) == "10월 24일 (목) 오후 5시 ~ 11월 23일 (토) 오후 5시")
     }

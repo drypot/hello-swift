@@ -8,6 +8,9 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 struct ISO8601FormatTests {
 
     // 2024-10-24 08:30:10 +0000
@@ -16,33 +19,34 @@ struct ISO8601FormatTests {
 
     @Test func testFactoryVariable() throws {
 
-        // https://developer.apple.com/documentation/foundation/date/iso8601formatstyle/3796293-iso8601
+        // https://developer.apple.com/documentation/foundation/formatstyle/3796519-iso8601
         // iso8601: A convenience factory variable that provides a base format for customizing ISO 8601 date format styles.
 
         #expect(date1410.formatted(.iso8601) == "2024-10-24T08:30:10Z")
     }
 
     @Test func testDefaults() throws {
-        var style = Date.ISO8601FormatStyle()
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.ISO8601FormatStyle(timeZone: TimeZone(identifier: "Asia/Seoul")!)
 
         #expect(style.format(date1410) == "2024-10-24T17:30:10+0900")
         #expect(date1410.formatted(style) == "2024-10-24T17:30:10+0900")
     }
 
     @Test func testModifiers() throws {
-        var style = Date.ISO8601FormatStyle()
-            .year().month().day().time(includingFractionalSeconds: false).dateTimeSeparator(.space)
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.ISO8601FormatStyle(
+            dateTimeSeparator: .space,
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        ).year().month().day().time(includingFractionalSeconds: false)
 
         #expect(style.format(date1410) == "2024-10-24 17:30:10")
         #expect(date1410.formatted(style) == "2024-10-24 17:30:10")
     }
 
     @Test func testParsing() throws {
-        var style = Date.ISO8601FormatStyle()
-            .year().month().day().time(includingFractionalSeconds: false).dateTimeSeparator(.space)
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.ISO8601FormatStyle(
+            dateTimeSeparator: .space,
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        ).year().month().day().time(includingFractionalSeconds: false)
 
         let string1 = date1410.formatted(style)
 

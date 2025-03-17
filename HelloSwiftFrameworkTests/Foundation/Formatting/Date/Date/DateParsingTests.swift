@@ -8,6 +8,9 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 struct DateParsingTests {
 
     // 2024-10-24 08:30:10 +0000
@@ -15,9 +18,10 @@ struct DateParsingTests {
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
     @Test func testParsingWithFormatStyle() throws {
-        var style = Date.FormatStyle().year().month().day().hour().minute().second()
-        style.locale = Locale(identifier: "ko_KR")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.FormatStyle(
+            locale: Locale(identifier: "ko_KR"),
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        ).year().month().day().hour().minute().second()
 
         let string1 = date1410.formatted(style)
 

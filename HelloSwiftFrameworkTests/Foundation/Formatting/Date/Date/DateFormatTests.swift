@@ -8,6 +8,12 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
+// Date.FormatStyle
+// https://developer.apple.com/documentation/foundation/date/formatstyle
+
 struct DateFormatTests {
 
     // 2024-10-24 08:30:10 +0000
@@ -39,9 +45,10 @@ struct DateFormatTests {
     }
 
     @Test func testKR() throws {
-        var style = Date.FormatStyle()
-        style.locale = Locale(identifier: "ko_KR")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.FormatStyle(
+            locale: Locale(identifier: "ko_KR"),
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
 
         #expect(style.format(date1410) == "2024. 10. 24. 오후 5:30")
 
@@ -51,9 +58,10 @@ struct DateFormatTests {
     }
 
     @Test func testUS() throws {
-        var style = Date.FormatStyle()
-        style.locale = Locale(identifier: "en_US")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.FormatStyle(
+            locale: Locale(identifier: "en_US"),
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
 
         #expect(style.format(date1410) == "10/24/2024, 5:30 PM")
 
@@ -66,9 +74,10 @@ struct DateFormatTests {
     }
 
     @Test func testCN() throws {
-        var style = Date.FormatStyle()
-        style.locale = Locale(identifier: "zh_CN")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.FormatStyle(
+            locale: Locale(identifier: "zh_CN"),
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
 
         #expect(style.format(date1410) == "2024/10/24 17:30")
 
@@ -79,9 +88,10 @@ struct DateFormatTests {
 
 
     @Test func testJP() throws {
-        var style = Date.FormatStyle()
-        style.locale = Locale(identifier: "ja_JP")
-        style.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let style = Date.FormatStyle(
+            locale: Locale(identifier: "ja_JP"),
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
 
         #expect(style.format(date1410) == "2024/10/24 17:30")
 

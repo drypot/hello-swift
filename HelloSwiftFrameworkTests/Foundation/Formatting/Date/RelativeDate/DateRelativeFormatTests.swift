@@ -8,11 +8,14 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 struct DateRelativeFormatTests {
 
     @Test func test() throws {
-        // TO DO
 
+        // TO DO
         // "1 week ago" 이런 것들;
         
     }

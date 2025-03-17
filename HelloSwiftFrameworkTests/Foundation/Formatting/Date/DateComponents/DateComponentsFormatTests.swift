@@ -8,9 +8,11 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 // Date.ComponentsFormatStyle
 // https://developer.apple.com/documentation/foundation/date/componentsformatstyle
-
 // A style for formatting a date interval in terms of specific date components.
 
 struct DateComponentsFormatTests {
@@ -33,9 +35,11 @@ struct DateComponentsFormatTests {
     @Test func test30days() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.locale = Locale(identifier: "ko_KR")
-        style.calendar = calendar
+        var style = Date.ComponentsFormatStyle(
+            style: .abbreviated,
+            locale: Locale(identifier: "ko_KR"),
+            calendar: calendar
+        )
 
         let days30 = date1410 ..< calendar.date(byAdding: .day, value: 30, to: date1410)!
 
@@ -51,9 +55,11 @@ struct DateComponentsFormatTests {
     @Test func test90Minutes() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.locale = Locale(identifier: "ko_KR")
-        style.calendar = calendar
+        var style = Date.ComponentsFormatStyle(
+            style: .abbreviated,
+            locale: Locale(identifier: "ko_KR"),
+            calendar: calendar
+        )
 
         let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
@@ -72,9 +78,11 @@ struct DateComponentsFormatTests {
     @Test func test90MinutesUS() throws {
         let calendar = Calendar(identifier: .gregorian)
 
-        var style = Date.ComponentsFormatStyle(style: .abbreviated)
-        style.locale = Locale(identifier: "en_US")
-        style.calendar = calendar
+        var style = Date.ComponentsFormatStyle(
+            style: .abbreviated,
+            locale: Locale(identifier: "en_US"),
+            calendar: calendar
+        )
 
         let min90 = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!
 
