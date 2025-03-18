@@ -19,7 +19,7 @@ import Testing
 
 struct ByteCountFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3867781-bytecount
         // byteCount(style:allowedUnits:spellsOutZero:includesActualByteCount:) : Returns a format style to format a data storage value.

@@ -16,7 +16,7 @@ import Testing
 
 struct URLFormatTests {
 
-    @Test func testFactoryVariables() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/4013379-url
         // url: A style for formatting a URL.

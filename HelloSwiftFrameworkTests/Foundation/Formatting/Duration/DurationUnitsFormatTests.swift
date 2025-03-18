@@ -8,6 +8,9 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
 // Duration
 // https://developer.apple.com/documentation/swift/duration
 // A representation of high precision time.
@@ -17,7 +20,7 @@ import Testing
 
 struct DurationUnitsFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3988409-units
         // units(...) : Returns a style for formatting a duration

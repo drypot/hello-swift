@@ -21,7 +21,7 @@ struct DateComponentsFormatTests {
     // 2024-10-24 17:30:10 +0900
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
         let calendar = Calendar(identifier: .gregorian)
 
         let duration = date1410 ..< calendar.date(byAdding: .minute, value: 90, to: date1410)!

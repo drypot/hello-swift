@@ -17,7 +17,7 @@ import Testing
 
 struct FloatingPointFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3870097-number
         // number: A style for formatting the Swift standard double-precision floating-point type.

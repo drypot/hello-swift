@@ -20,7 +20,7 @@ import Testing
 
 struct DecimalFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
         let number: Decimal = 0.1
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3796532-number

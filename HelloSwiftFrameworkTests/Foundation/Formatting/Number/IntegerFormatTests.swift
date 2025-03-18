@@ -16,7 +16,7 @@ import Testing
 
 struct IntegerFormatTests {
 
-    @Test func testFactoryVariables() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3870100-number
         // number: A style for formatting the Swift default integer type.

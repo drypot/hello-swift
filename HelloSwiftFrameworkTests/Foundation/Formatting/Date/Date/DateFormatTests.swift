@@ -20,7 +20,7 @@ struct DateFormatTests {
     // 2024-10-24 17:30:10 +0900
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/date/formatstyle/3798884-datetime
         // dateTime: A factory variable used as a base for custom date format styles.

@@ -23,7 +23,7 @@ import Testing
 
 struct DurationTimeFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3988407-time
         // time(pattern:) : Returns a style for formatting a duration using a provided pattern.

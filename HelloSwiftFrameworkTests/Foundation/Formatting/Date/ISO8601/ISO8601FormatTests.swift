@@ -17,7 +17,7 @@ struct ISO8601FormatTests {
     // 2024-10-24 17:30:10 +0900
     let date1410 = Date(timeIntervalSinceReferenceDate: 751451410.0)
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3796519-iso8601
         // iso8601: A convenience factory variable that provides a base format for customizing ISO 8601 date format styles.

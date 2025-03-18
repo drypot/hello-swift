@@ -19,7 +19,7 @@ import Testing
 
 struct PercentFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3870113-percent
         // percent: A style for formatting signed integer types in Swift as a percent representation.

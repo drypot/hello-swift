@@ -18,7 +18,7 @@ import Testing
 
 struct CurrencyFormatTests {
 
-    @Test func testFactoryVariable() throws {
+    @Test func testFactory() throws {
 
         // https://developer.apple.com/documentation/foundation/formatstyle/3870093-currency
         // currency(code:) : Returns a format style to use integer / floating-point currency notation.
@@ -48,7 +48,7 @@ struct CurrencyFormatTests {
         #expect((try Int("12345", format: style)) == 12345)
         #expect((try Int("12,345", format: style)) == 12345)
         #expect((try Int("₩12,345", format: style)) == 12345)
-        
+
         #expect(throws: Error.self) {
             try Int("$12,345", format: style)
         }
