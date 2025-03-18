@@ -8,17 +8,29 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
+// IntegerFormatStyle
+// https://developer.apple.com/documentation/foundation/integerformatstyle
+
 struct IntegerFormatTests {
 
     @Test func testFactoryVariables() throws {
-        #expect(12345.formatted() == "12,345")
 
-        #expect(12345.formatted(.number) == "12,345")
-        #expect(12345.formatted(.number.grouping(.never)) == "12345")
+        // https://developer.apple.com/documentation/foundation/formatstyle/3870100-number
+        // number: A style for formatting the Swift default integer type.
 
-        #expect(12345.formatted(.percent) == "12,345%")
-        #expect(12345.formatted(.currency(code: "KRW")) == "₩12,345")
-        #expect(12345.formatted(.currency(code: "USD")) == "US$12,345.00")
+        let number = 12345
+
+        #expect(number.formatted() == "12,345")
+
+        #expect(number.formatted(.number) == "12,345")
+        #expect(number.formatted(.number.grouping(.never)) == "12345")
+
+        #expect(number.formatted(.percent) == "12,345%")
+        #expect(number.formatted(.currency(code: "KRW")) == "₩12,345")
+        #expect(number.formatted(.currency(code: "USD")) == "US$12,345.00")
     }
 
     @Test func testIntegerFormatStyle() throws {
@@ -50,10 +62,10 @@ struct IntegerFormatTests {
         let style = IntegerFormatStyle<Int>(locale: Locale(identifier: "ko_KR"))
         let strategy = style.parseStrategy
 
-        #expect(try Int("12345", format: style) == 12345)
+        #expect((try strategy.parse("12345")) == 12345)
+        #expect((try strategy.parse("12,345")) == 12345)
 
-        #expect(try strategy.parse("12345") == 12345)
-        #expect(try strategy.parse("12,345") == 12345)
+        #expect((try Int("12345", format: style)) == 12345)
 
         #expect(throws: Error.self) {
             try strategy.parse("₩12,345")

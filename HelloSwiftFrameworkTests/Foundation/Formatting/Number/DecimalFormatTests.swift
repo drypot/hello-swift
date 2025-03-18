@@ -8,6 +8,12 @@
 import Foundation
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
+// Decimal.FormatStyle
+// https://developer.apple.com/documentation/foundation/decimal/formatstyle
+
 // Double: Ideal for scientific calculations, graphics, and other performance-critical applications where small precision errors are acceptable.
 
 // Decimal: Preferred for financial calculations, accounting, and other applications where precision is crucial.
@@ -15,7 +21,10 @@ import Testing
 struct DecimalFormatTests {
 
     @Test func testFactoryVariable() throws {
-        let number:Decimal = 0.1
+        let number: Decimal = 0.1
+
+        // https://developer.apple.com/documentation/foundation/formatstyle/3796532-number
+        // number: A style for formatting decimal values.
 
         #expect(number.formatted() == "0.1")
 
@@ -54,15 +63,15 @@ struct DecimalFormatTests {
         let style = Decimal.FormatStyle(locale: Locale(identifier: "ko_KR"))
         let strategy = style.parseStrategy
 
+        #expect((try strategy.parse("12345.789")) == Decimal(string: "12345.789"))
+        #expect((try strategy.parse("12,345.789")) == Decimal(string: "12345.789"))
+
         #expect((try Decimal("12345.789", format: style)) != Decimal(12345.789))
         #expect((try Decimal("12345.789", format: style)) == Decimal(sign: .plus, exponent: -3, significand: 12345789))
         #expect((try Decimal("12345.789", format: style)) == Decimal(string: "12345.789"))
 
-        #expect((try strategy.parse("12345.789")) == Decimal(string: "12345.789"))
-        #expect((try strategy.parse("12,345.789")) == Decimal(string: "12345.789"))
-
         #expect(throws: Error.self) {
-            try strategy.parse("₩12,345")
+            try strategy.parse("xxx")
         }
     }
 

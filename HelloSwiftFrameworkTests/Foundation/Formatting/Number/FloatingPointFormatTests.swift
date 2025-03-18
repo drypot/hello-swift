@@ -9,9 +9,19 @@ import Foundation
 import RegexBuilder
 import Testing
 
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
+// FloatingPointFormatStyle
+// https://developer.apple.com/documentation/foundation/floatingpointformatstyle
+
 struct FloatingPointFormatTests {
 
     @Test func testFactoryVariable() throws {
+
+        // https://developer.apple.com/documentation/foundation/formatstyle/3870097-number
+        // number: A style for formatting the Swift standard double-precision floating-point type.
+
         let number = 0.1
 
         #expect(number.formatted() == "0.1")
@@ -51,10 +61,10 @@ struct FloatingPointFormatTests {
         let style = FloatingPointFormatStyle<Double>(locale: Locale(identifier: "ko_KR"))
         let strategy = style.parseStrategy
 
-        #expect((try Double("12345.789", format: style)) == 12345.789)
-
         #expect((try strategy.parse("12345.789")) == 12345.789)
         #expect((try strategy.parse("12,345.789")) == 12345.789)
+
+        #expect((try Double("12345.789", format: style)) == 12345.789)
 
         #expect(throws: Error.self) {
             try strategy.parse("₩12,345")
