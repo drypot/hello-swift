@@ -1,5 +1,5 @@
 //
-//  ByteCountFormatStyleTests.swift
+//  ByteCountFormatTests.swift
 //  HelloSwiftFrameworkTests
 //
 //  Created by Kyuhyun Park on 10/29/24.
@@ -8,9 +8,22 @@
 import Foundation
 import Testing
 
-struct ByteCountFormatStyleTests {
+// Data Formatting
+// https://developer.apple.com/documentation/foundation/data_formatting
+
+// ByteCountFormatStyle
+// https://developer.apple.com/documentation/foundation/bytecountformatstyle
+
+// Measurement.FormatStyle.ByteCount
+// https://developer.apple.com/documentation/foundation/measurement/formatstyle/bytecount
+
+struct ByteCountFormatTests {
 
     @Test func testFactoryVariable() throws {
+
+        // https://developer.apple.com/documentation/foundation/formatstyle/3867781-bytecount
+        // byteCount(style:allowedUnits:spellsOutZero:includesActualByteCount:) : Returns a format style to format a data storage value.
+
         let count: Int64 = 1024
         #expect(count.formatted(.byteCount(style: .memory)) == "1kB")
     }
