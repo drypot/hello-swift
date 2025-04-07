@@ -29,7 +29,7 @@ struct SinkTests {
 
         logger.append(99)
 
-        #expect(logger.log() == [1, 2, 3, 4, 5, 90, 99])
+        #expect(logger.result() == [1, 2, 3, 4, 5, 90, 99])
     }
 
 }

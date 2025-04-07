@@ -117,7 +117,7 @@ struct TaskTests {
         await task1.value
         await task2.value
 
-        #expect(logger.log() == [1, 2, 1, 2])
+        #expect(logger.result() == [1, 2, 1, 2])
     }
 
     @Test func testTaskSleep() async throws {

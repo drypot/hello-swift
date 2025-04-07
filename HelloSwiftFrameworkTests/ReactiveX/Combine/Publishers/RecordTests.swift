@@ -26,7 +26,7 @@ struct RecordTests {
                 }
             )
 
-        #expect(logger.log() == [1, 2, 3, 4, 5, 99])
+        #expect(logger.result() == [1, 2, 3, 4, 5, 99])
     }
 
     @Test func testRecording() throws {
@@ -64,7 +64,7 @@ struct RecordTests {
             }
         )
 
-        #expect(logger.log() == [1, 2, 3, 4, 5, 99, 1, 2, 3, 4, 5, 99])
+        #expect(logger.result() == [1, 2, 3, 4, 5, 99, 1, 2, 3, 4, 5, 99])
     }
 
 }

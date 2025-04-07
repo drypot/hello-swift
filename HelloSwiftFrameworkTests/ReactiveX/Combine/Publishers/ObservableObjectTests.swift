@@ -44,15 +44,15 @@ struct ObservableObjectTests {
             }
             .store(in: &cancellables)
 
-        #expect(logger.log() == [24])
+        #expect(logger.result() == [24])
 
         john.age += 1
 
-        #expect(logger.log() == [24, 99, 25])
+        #expect(logger.result() == [24, 99, 25])
 
         john.age += 1
 
-        #expect(logger.log() == [24, 99, 25, 99, 26])
+        #expect(logger.result() == [24, 99, 25, 99, 26])
     }
 
 

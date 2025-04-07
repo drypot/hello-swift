@@ -30,7 +30,7 @@ struct FailTests {
                 logger.append(3)
             }
 
-        #expect(logger.log() == [2])
+        #expect(logger.result() == [2])
     }
 
 }

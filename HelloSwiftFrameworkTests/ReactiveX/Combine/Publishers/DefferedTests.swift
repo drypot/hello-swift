@@ -23,7 +23,7 @@ struct DefferedTests {
             logger.append(value)
         }
 
-        #expect(logger.log() == [42])
+        #expect(logger.result() == [42])
     }
 
 }

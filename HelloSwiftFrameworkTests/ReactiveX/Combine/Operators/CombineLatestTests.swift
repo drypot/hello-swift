@@ -33,7 +33,7 @@ struct CombineLatestTests {
         p2.send(3)
         p2.send(4)
 
-        #expect(logger.log() == [21, 22, 32, 33, 34])
+        #expect(logger.result() == [21, 22, 32, 33, 34])
     }
 
     @Test func test2() throws {
@@ -58,7 +58,7 @@ struct CombineLatestTests {
         p2.send(3)
         p2.send(4)
 
-        #expect(logger.log() == [21, 22, 32, 33, 34])
+        #expect(logger.result() == [21, 22, 32, 33, 34])
     }
 
 }

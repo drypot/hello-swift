@@ -54,7 +54,7 @@ struct DispatchQueueTests {
 
         group.wait()
 
-        #expect(logger.log() == [1, 2, 3])
+        #expect(logger.result() == [1, 2, 3])
     }
 
     @Test func testCallMainQueue() throws {
@@ -76,7 +76,7 @@ struct DispatchQueueTests {
 
         group.wait()
 
-        #expect(logger.log() == [1])
+        #expect(logger.result() == [1])
     }
 
     @Test func testDispatchQueueSync() async throws {
@@ -127,7 +127,7 @@ struct DispatchQueueTests {
 
         workItem.wait()
 
-        #expect(logger.log() == [1])
+        #expect(logger.result() == [1])
     }
 
     @Test func testSemaphore() throws {
@@ -148,7 +148,7 @@ struct DispatchQueueTests {
         // count + 이면 1 내리고 진행한다.
         semaphore.wait()
 
-        #expect(logger.log() == [1])
+        #expect(logger.result() == [1])
     }
 
     @Test func testContinuation() async throws {
@@ -161,7 +161,7 @@ struct DispatchQueueTests {
             }
         }
 
-        #expect(logger.log() == [1])
+        #expect(logger.result() == [1])
     }
 
 }

@@ -43,7 +43,7 @@ struct CustomSubscriberTests {
 
         publisher.subscribe(subscriber)
 
-        #expect(subscriber.logger.log() == [-99, 1, 2, 3, 4, 5, 99])
+        #expect(subscriber.logger.result() == [-99, 1, 2, 3, 4, 5, 99])
     }
 
 }

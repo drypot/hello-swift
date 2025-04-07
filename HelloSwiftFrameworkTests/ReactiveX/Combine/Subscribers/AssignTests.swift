@@ -31,7 +31,7 @@ struct AssignTests {
 
         receiver.logger.append(99)
 
-        #expect(receiver.logger.log() == [1, 2, 3, 4, 5, 99])
+        #expect(receiver.logger.result() == [1, 2, 3, 4, 5, 99])
     }
 
 }

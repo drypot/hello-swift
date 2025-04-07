@@ -19,7 +19,7 @@ struct EmptyTests {
                 logger.append(value)
             }
 
-        #expect(logger.log() == [])
+        #expect(logger.result() == [])
     }
 
 }

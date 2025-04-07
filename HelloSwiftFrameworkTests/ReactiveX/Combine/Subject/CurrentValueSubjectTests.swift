@@ -35,7 +35,7 @@ struct CurrentValueSubjectTests {
         subject.value = 4
         subject.send(completion: .finished)
 
-        #expect(logger.log() == [10, 1, 2, 3, 4, 99])
+        #expect(logger.result() == [10, 1, 2, 3, 4, 99])
     }
 
 }

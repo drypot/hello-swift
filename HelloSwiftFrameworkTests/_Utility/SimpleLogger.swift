@@ -16,7 +16,7 @@ struct SimpleLogger<T> where T: Sendable {
         _log.withLock { $0.append(value) }
     }
 
-    func log() -> [T] {
+    func result() -> [T] {
         _log.withLock { $0 }
     }
     

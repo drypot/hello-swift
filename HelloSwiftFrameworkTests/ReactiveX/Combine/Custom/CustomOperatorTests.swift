@@ -89,6 +89,6 @@ struct CustomOperatorTests {
 
         operator_.subscribe(subscriber)
 
-        #expect(logger.log() == [2, 4, 6, 8, 10, 99])
+        #expect(logger.result() == [2, 4, 6, 8, 10, 99])
     }
 }

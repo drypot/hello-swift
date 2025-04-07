@@ -35,7 +35,7 @@ struct PublishedTests {
         weather.temperature = 30
         weather.temperature = 40
 
-        #expect(logger.log() == [10, 20, 30, 40])
+        #expect(logger.result() == [10, 20, 30, 40])
     }
 
     @Test func testAssignToPublished() throws {
@@ -70,7 +70,7 @@ struct PublishedTests {
         weather.temperature = 40
         weather.temperature = 50
 
-        #expect(logger.log() == [0, 10, 20, 30, 40, 50])
+        #expect(logger.result() == [0, 10, 20, 30, 40, 50])
     }
 
 }

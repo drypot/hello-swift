@@ -38,7 +38,7 @@ struct HandleEventsTests {
 
         logger.append("end")
 
-        #expect(logger.log() == [
+        #expect(logger.result() == [
             "receiveSubscription",
             "receiveRequest",
             "receiveOutput",

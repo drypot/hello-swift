@@ -33,7 +33,7 @@ struct FutureTests {
             logger.append(value)
         }
 
-        #expect(logger.log() == [10, 20, 99])
+        #expect(logger.result() == [10, 20, 99])
     }
 
     @Test func testDeferredFuture() throws {
@@ -55,7 +55,7 @@ struct FutureTests {
             logger.append(value)
         }
 
-        #expect(logger.log() == [20, 10, 99])
+        #expect(logger.result() == [20, 10, 99])
     }
 
     @Test func testFutureAwait() async throws {

@@ -45,7 +45,7 @@ struct SubscribeOnTests {
         }
 
         #expect(
-            logger.log() == [
+            logger.result() == [
                 "receiveRequest on background thread",
                 "receiveOutput on main thread",
                 "good day"

@@ -76,7 +76,7 @@ struct CustomPublisherTests {
 
         publisher.subscribe(sink)
 
-        #expect(logger.log() == [1, 2, 3, 4, 5, 99])
+        #expect(logger.result() == [1, 2, 3, 4, 5, 99])
     }
 
 }

@@ -33,7 +33,7 @@ struct NotificationCenterPublisherTests {
             userInfo: ["mark" : 99]
         )
 
-        #expect(logger.log() == [99])
+        #expect(logger.result() == [99])
     }
 
 }

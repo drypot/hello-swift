@@ -21,7 +21,7 @@ struct SimpleLoggerTests {
 
         logger.append(3)
 
-        #expect(logger.log() == [1, 2, 3])
+        #expect(logger.result() == [1, 2, 3])
     }
 
 }
