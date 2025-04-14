@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HelloSwiftFramework
 import Testing
 
 struct ObservableArrayTests {
@@ -45,7 +46,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.valueProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
@@ -63,7 +64,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.valueProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 밸류 엘리먼트 변화에 onChange 가 호출된다.
@@ -81,7 +82,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.valueProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 업데이트가 여러번 발생해도 onChange 는 한번만 호출된다.
@@ -101,7 +102,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.refProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
@@ -119,7 +120,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.refProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 오브젝트 엘리먼트에 대한 업데이트엔 onChange 가 발생하지 않는다.
@@ -137,7 +138,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.refProducts[0].name
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         products.refProducts[0].name = "Item1Ver2"
@@ -154,7 +155,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.observableProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 어레이 자체의 변화에 onChange 가 호출된다.
@@ -172,7 +173,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.observableProducts
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 오브젝트 엘리먼트에 대한 업데이트엔 onChange 가 발생하지 않는다.
@@ -190,7 +191,7 @@ struct ObservableArrayTests {
         withObservationTracking {
             _ = products.observableProducts[0].name
         } onChange: {
-            logger.append(1)
+            logger.log(1)
         }
 
         // 오브젝트 엘리먼트를 구체적으로 노출시켜주면 onChange 가 발생한다.

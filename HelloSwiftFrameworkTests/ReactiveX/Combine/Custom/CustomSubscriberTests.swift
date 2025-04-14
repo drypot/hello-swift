@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
@@ -23,17 +24,17 @@ struct CustomSubscriberTests {
         }
 
         func receive(subscription: Subscription) {
-            logger.append(-99)
+            logger.log(-99)
             subscription.request(.unlimited)
         }
 
         func receive(_ input: Input) -> Subscribers.Demand {
-            logger.append(input)
+            logger.log(input)
             return .unlimited
         }
 
         func receive(completion: Subscribers.Completion<Never>) {
-            logger.append(99)
+            logger.log(99)
         }
     }
 

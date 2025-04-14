@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct NotificationCenterPublisherTests {
@@ -23,7 +24,7 @@ struct NotificationCenterPublisherTests {
                 notification.userInfo?["mark"] as? Int
             }
             .sink { value in
-                logger.append(value)
+                logger.log(value)
             }
             .store(in: &cancellables)
 

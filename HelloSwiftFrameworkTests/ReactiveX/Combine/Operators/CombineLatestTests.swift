@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct CombineLatestTests {
@@ -20,7 +21,7 @@ struct CombineLatestTests {
 
         Publishers.CombineLatest(p1, p2)
             .map { $0 + $1 }
-            .sink { logger.append($0) }
+            .sink { logger.log($0) }
             .store(in: &cancellables)
 
         p1.send(10)
@@ -45,7 +46,7 @@ struct CombineLatestTests {
 
         p1
             .combineLatest(p2) { $0 + $1 }
-            .sink { logger.append($0) }
+            .sink { logger.log($0) }
             .store(in: &cancellables)
 
         p1.send(10)

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct FailTests {
@@ -22,12 +23,12 @@ struct FailTests {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    logger.append(1)
+                    logger.log(1)
                 case .failure:
-                    logger.append(2)
+                    logger.log(2)
                 }
             } receiveValue: { _ in
-                logger.append(3)
+                logger.log(3)
             }
 
         #expect(logger.result() == [2])

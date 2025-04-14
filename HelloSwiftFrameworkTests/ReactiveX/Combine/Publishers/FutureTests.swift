@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct FutureTests {
@@ -23,14 +24,14 @@ struct FutureTests {
         // without waiting for a subscriber to be attached
 
         let future = Future<_, Never> { promise in
-            logger.append(10)
+            logger.log(10)
             promise(.success(99))
         }
 
-        logger.append(20)
+        logger.log(20)
 
         let _ = future.sink { value in
-            logger.append(value)
+            logger.log(value)
         }
 
         #expect(logger.result() == [10, 20, 99])
@@ -44,15 +45,15 @@ struct FutureTests {
 
         let future = Deferred {
             Future<_, Never> { promise in
-                logger.append(10)
+                logger.log(10)
                 promise(.success(99))
             }
         }
 
-        logger.append(20)
+        logger.log(20)
 
         let _ = future.sink { value in
-            logger.append(value)
+            logger.log(value)
         }
 
         #expect(logger.result() == [20, 10, 99])

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct EmptyTests {
@@ -16,7 +17,7 @@ struct EmptyTests {
 
         let _ = Empty()
             .sink { value in
-                logger.append(value)
+                logger.log(value)
             }
 
         #expect(logger.result() == [])

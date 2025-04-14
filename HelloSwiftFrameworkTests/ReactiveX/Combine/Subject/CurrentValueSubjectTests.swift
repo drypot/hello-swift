@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/combine/passthroughsubject
@@ -23,9 +24,9 @@ struct CurrentValueSubjectTests {
 
         subject
             .sink { completion in
-                logger.append(99)
+                logger.log(99)
             } receiveValue: { value in
-                logger.append(value)
+                logger.log(value)
             }
             .store(in: &cancellables)
 

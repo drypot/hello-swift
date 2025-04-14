@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/observation
@@ -29,9 +30,9 @@ struct ObservableTests {
 
         withObservationTracking {
             _ = pet.name
-            logger.append(1)
+            logger.log(1)
         } onChange: {
-            logger.append(2)
+            logger.log(2)
         }
 
         // 노출된 프로퍼티가 업데이트되면 onChange 가 호출된다.
@@ -47,9 +48,9 @@ struct ObservableTests {
 
         withObservationTracking {
             _ = pet.name
-            logger.append(1)
+            logger.log(1)
         } onChange: {
-            logger.append(2)
+            logger.log(2)
         }
 
         // 노출되지 않은 프로퍼티가 업데이트되면 호출되지 않는다.
@@ -69,9 +70,9 @@ struct ObservableTests {
         withObservationTracking {
             _ = pets[0].name
             _ = pets[1].name
-            logger.append(1)
+            logger.log(1)
         } onChange: {
-            logger.append(2)
+            logger.log(2)
         }
 
         // 엘리먼트가 Observable 일 때, 다른 인자들과 상관없이 정상 작동함을 확인.

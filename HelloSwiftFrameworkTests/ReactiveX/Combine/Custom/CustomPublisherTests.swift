@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
@@ -69,9 +70,9 @@ struct CustomPublisherTests {
         let publisher = CustomPublisher<Int, Never>(values: [1, 2, 3, 4, 5])
 
         let sink = Subscribers.Sink<Int, Never> { completion in
-            logger.append(99)
+            logger.log(99)
         } receiveValue: { value in
-            logger.append(value)
+            logger.log(value)
         }
 
         publisher.subscribe(sink)

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/combine
@@ -19,7 +20,7 @@ struct AssignTests {
             var value: Int {
                 get { 0 }
                 set {
-                    logger.append(newValue)
+                    logger.log(newValue)
                 }
             }
         }
@@ -29,7 +30,7 @@ struct AssignTests {
         let _ = [1, 2, 3, 4, 5].publisher
             .assign(to: \.value, on: receiver)
 
-        receiver.logger.append(99)
+        receiver.logger.log(99)
 
         #expect(receiver.logger.result() == [1, 2, 3, 4, 5, 99])
     }

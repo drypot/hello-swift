@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/combine
@@ -22,12 +23,12 @@ struct SinkTests {
         
         let _ = [1, 2, 3, 4, 5].publisher
             .sink { completion in
-                logger.append(90)
+                logger.log(90)
             } receiveValue: { value in
-                logger.append(value)
+                logger.log(value)
             }
 
-        logger.append(99)
+        logger.log(99)
 
         #expect(logger.result() == [1, 2, 3, 4, 5, 90, 99])
     }

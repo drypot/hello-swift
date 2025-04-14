@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/combine/observableobject
@@ -34,13 +35,13 @@ struct ObservableObjectTests {
 
         john.objectWillChange
             .sink { _ in
-                logger.append(99)
+                logger.log(99)
             }
             .store(in: &cancellables)
 
         john.$age
             .sink {
-                logger.append($0)
+                logger.log($0)
             }
             .store(in: &cancellables)
 

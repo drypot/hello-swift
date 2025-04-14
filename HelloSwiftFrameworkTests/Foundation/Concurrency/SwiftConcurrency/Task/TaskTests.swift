@@ -5,6 +5,7 @@
 //  Created by Kyuhyun Park on 6/5/24.
 //
 
+import HelloSwiftFramework
 import Testing
 
 // https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency#Tasks-and-Task-Groups
@@ -102,14 +103,14 @@ struct TaskTests {
 
         let task1 = Task {
             for _ in 0..<2 {
-                logger.append(1)
+                logger.log(1)
                 await Task.yield()
             }
         }
 
         let task2 = Task {
             for _ in 0..<2 {
-                logger.append(2)
+                logger.log(2)
                 await Task.yield()
             }
         }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct RecordTests {
@@ -19,10 +20,10 @@ struct RecordTests {
         let _ = Record<Int, Never>(output: [1, 2, 3, 4, 5], completion: .finished)
             .sink(
                 receiveCompletion: { completion in
-                    logger.append(99)
+                    logger.log(99)
                 },
                 receiveValue: { value in
-                    logger.append(value)
+                    logger.log(value)
                 }
             )
 
@@ -47,20 +48,20 @@ struct RecordTests {
         let _ = Record<Int, Never>(recording: record.recording)
         .sink(
             receiveCompletion: { completion in
-                logger.append(99)
+                logger.log(99)
             },
             receiveValue: { value in
-                logger.append(value)
+                logger.log(value)
             }
         )
 
         let _ = Record<Int, Never>(recording: record.recording)
         .sink(
             receiveCompletion: { completion in
-                logger.append(99)
+                logger.log(99)
             },
             receiveValue: { value in
-                logger.append(value)
+                logger.log(value)
             }
         )
 

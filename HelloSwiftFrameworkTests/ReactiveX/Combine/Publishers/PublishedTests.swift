@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct PublishedTests {
@@ -27,7 +28,7 @@ struct PublishedTests {
 
         weather.$temperature
             .sink {
-                logger.append($0)
+                logger.log($0)
             }
             .store(in: &cancellables)
 
@@ -57,7 +58,7 @@ struct PublishedTests {
         // $receiver 에 sink 연결하자 마자 초기값 0 이 logger 에 들어간다.
         weather.$receiver
             .sink {
-                logger.append($0)
+                logger.log($0)
             }
             .store(in: &cancellables)
 

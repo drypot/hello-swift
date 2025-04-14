@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/combine
@@ -19,24 +20,24 @@ struct HandleEventsTests {
         let _ = Just("value")
 
             .handleEvents(receiveSubscription: { _ in
-                logger.append("receiveSubscription")
+                logger.log("receiveSubscription")
             }, receiveOutput: { _ in
-                logger.append("receiveOutput")
+                logger.log("receiveOutput")
             }, receiveCompletion: { _ in
-                logger.append("receiveCompletion")
+                logger.log("receiveCompletion")
             }, receiveCancel: {
-                logger.append("receiveCancel")
+                logger.log("receiveCancel")
             }, receiveRequest: { _ in
-                logger.append("receiveRequest")
+                logger.log("receiveRequest")
             })
 
             .sink { completion in
-                logger.append("sink completion")
+                logger.log("sink completion")
             } receiveValue: { value in
-                logger.append("sink value")
+                logger.log("sink value")
             }
 
-        logger.append("end")
+        logger.log("end")
 
         #expect(logger.result() == [
             "receiveSubscription",

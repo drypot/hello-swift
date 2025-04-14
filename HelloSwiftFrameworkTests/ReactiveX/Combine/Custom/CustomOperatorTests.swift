@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 // https://github.com/drypot/swift-memo/blob/main/md/swift-combine-chain.md
@@ -82,9 +83,9 @@ struct CustomOperatorTests {
         let publisher = [1, 2, 3, 4, 5].publisher
         let operator_ = CustomOperator(upstream: publisher) { $0 * 2 }
         let subscriber = Subscribers.Sink<Int, Never> { completion in
-            logger.append(99)
+            logger.log(99)
         } receiveValue: { value in
-            logger.append(value)
+            logger.log(value)
         }
 
         operator_.subscribe(subscriber)

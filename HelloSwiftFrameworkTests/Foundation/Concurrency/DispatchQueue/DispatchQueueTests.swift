@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HelloSwiftFramework
 import Testing
 
 // https://developer.apple.com/documentation/dispatch
@@ -30,19 +31,19 @@ struct DispatchQueueTests {
 
         group.enter()
         queue.async {
-            logger.append(1)
+            logger.log(1)
             group.leave()
         }
 
         group.enter()
         queue.async {
-            logger.append(2)
+            logger.log(2)
             group.leave()
         }
 
         group.enter()
         DispatchQueue.global().async {
-            logger.append(3)
+            logger.log(3)
             group.leave()
         }
 
@@ -69,7 +70,7 @@ struct DispatchQueueTests {
             // global 큐 안에서 main.async 를 부른다고 한다.
 
             DispatchQueue.main.async {
-                logger.append(1)
+                logger.log(1)
                 group.leave()
             }
         }
@@ -116,7 +117,7 @@ struct DispatchQueueTests {
         let logger = SimpleLogger<Int>()
 
         let workItem = DispatchWorkItem {
-            logger.append(1)
+            logger.log(1)
         }
 
         // WorkItem 을 만들어서 큐에 넣고 wait 하는 방법도 있다.
@@ -136,7 +137,7 @@ struct DispatchQueueTests {
         let semaphore = DispatchSemaphore(value: 0)
 
         DispatchQueue.global().async {
-            logger.append(1)
+            logger.log(1)
             // count 를 1 올린다.
             semaphore.signal()
         }
@@ -156,7 +157,7 @@ struct DispatchQueueTests {
 
         await withCheckedContinuation { continuation in
             DispatchQueue.global().async {
-                logger.append(1)
+                logger.log(1)
                 continuation.resume()
             }
         }

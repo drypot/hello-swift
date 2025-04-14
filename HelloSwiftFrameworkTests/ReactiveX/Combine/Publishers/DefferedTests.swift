@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct DefferedTests {
@@ -20,7 +21,7 @@ struct DefferedTests {
             return Just(42)
         }
         .sink { value in
-            logger.append(value)
+            logger.log(value)
         }
 
         #expect(logger.result() == [42])

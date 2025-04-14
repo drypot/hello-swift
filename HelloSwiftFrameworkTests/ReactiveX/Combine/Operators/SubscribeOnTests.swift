@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import HelloSwiftFramework
 import Testing
 
 struct SubscribeOnTests {
@@ -24,7 +25,7 @@ struct SubscribeOnTests {
             let _ = Just("good day")
                 .handleEvents(
                     receiveRequest: { _ in
-                        logger.append(Thread.isMainThread ?
+                        logger.log(Thread.isMainThread ?
                             "receiveRequest on main thread" :
                             "receiveRequest on background thread")
                     }
@@ -33,13 +34,13 @@ struct SubscribeOnTests {
                 .receive(on: DispatchQueue.main)
                 .handleEvents(
                     receiveOutput: { _ in
-                        logger.append(Thread.isMainThread ?
+                        logger.log(Thread.isMainThread ?
                             "receiveOutput on main thread" :
                             "receiveOutput on background thread")
                     }
                 )
                 .sink {
-                    logger.append($0)
+                    logger.log($0)
                     continuation.resume()
                 }
         }
