@@ -11,7 +11,7 @@ import Testing
 
 struct SimpleLoggerTests {
 
-    @Test func test() async throws {
+    @Test func testSendable() async throws {
         let logger = SimpleLogger<Int>()
 
         logger.log(1)
@@ -23,6 +23,16 @@ struct SimpleLoggerTests {
         logger.log(3)
 
         #expect(logger.result() == [1, 2, 3])
+    }
+
+    @Test func testLogMustBeShared() async throws {
+        let logger = SimpleLogger<Int>()
+        let logger2 = logger
+
+        logger.log(1)
+        logger2.log(2)
+
+        #expect(logger.result() == [1, 2])
     }
 
 }
