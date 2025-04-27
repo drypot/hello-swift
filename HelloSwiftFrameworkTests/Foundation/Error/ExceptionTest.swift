@@ -19,10 +19,10 @@ struct ExceptionTest {
     enum MathError: Error, Equatable {
         case divideByZeroError
         case negativeNumberError
-        case lousyNumberError(objection: String) // with an associated value
+        case lousyNumberError(objection: String)
     }
 
-    func calculate(_ a: Double, by b: Double) throws ->Double {
+    func divide(_ a: Double, by b: Double) throws -> Double {
         if b < 0.0 {
             throw MathError.negativeNumberError
         }
@@ -32,43 +32,46 @@ struct ExceptionTest {
         return a / b
     }
 
-    @Test func calculateReturnResult() throws {
+    @Test func testSuccess() throws {
         var result: Double?
+
         do {
-            result = try calculate(10, by: 2)
+            result = try divide(10, by: 2)
         } catch {
             result = nil
         }
+
         #expect(result == 5)
     }
     
-    @Test func calculateCanThrow() throws {
+    @Test func testThrows() throws {
         #expect(throws: Never.self) {
-            try calculate(10, by: 2)
+            try divide(10, by: 2)
         }
+
         #expect(throws: MathError.divideByZeroError) {
-            try calculate(10, by: 0.0)
+            try divide(10, by: 0.0)
         }
     }
     
-    @Test func weCanCatchError() throws {
+    @Test func testCatch() throws {
         var message: String?
         
         do {
-            let _ = try calculate(10, by: 0)
+            let _ = try divide(10, by: 0)
             message = "ok"
         } catch {
-            message = "some error"
+            message = "error"
         }
         
-        #expect(message == "some error")
+        #expect(message == "error")
     }
 
-    @Test func weCanCatchError2() throws {
+    @Test func testCatchCases() throws {
         var message: String?
         
         do {
-            let _ = try calculate(10, by: -10)
+            let _ = try divide(10, by: -10)
             message = "ok"
         } catch MathError.divideByZeroError {
             message = "divide by zero"
@@ -79,19 +82,24 @@ struct ExceptionTest {
         #expect(message == "negative number")
     }
     
-    @Test func weCanAssertErrorWillNotOccur() throws {
-        let result: Double = try! calculate(10, by: 2)
+    @Test func testTryBang() throws {
+        let result: Double
+
+        result = try! divide(10, by: 2)
+
         #expect(result == 5)
     }
     
-    @Test func tryCanBeOptional() throws {
+    @Test func testTryOptional() throws {
         do {
-            let result: Double? = try? calculate(10, by: 2)
+            let result: Double? = try? divide(10, by: 2)
+
             #expect(result == 5)
         }
         
         do {
-            let result: Double? = try? calculate(10, by: 0)
+            let result: Double? = try? divide(10, by: 0)
+            
             #expect(result == nil)
         }
     }
