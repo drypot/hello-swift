@@ -15,6 +15,8 @@ import Testing
 struct AssignTests {
 
     @Test func testAssign() throws {
+        var cancellables = Set<AnyCancellable>()
+
         class Receiver {
             let logger = SimpleLogger<Int>()
             var value: Int {
@@ -27,8 +29,9 @@ struct AssignTests {
 
         let receiver = Receiver()
 
-        let _ = [1, 2, 3, 4, 5].publisher
+        [1, 2, 3, 4, 5].publisher
             .assign(to: \.value, on: receiver)
+            .store(in: &cancellables)
 
         receiver.logger.log(99)
 
