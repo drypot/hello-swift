@@ -14,10 +14,10 @@ struct CombineLatestTests {
 
     @Test func test() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         let p1 = PassthroughSubject<Int, Never>()
         let p2 = PassthroughSubject<Int, Never>()
-        var cancellables = Set<AnyCancellable>()
 
         Publishers.CombineLatest(p1, p2)
             .map { $0 + $1 }

@@ -14,12 +14,13 @@ struct FailTests {
 
     @Test func testFail() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         enum CustomError: Error {
             case someError
         }
 
-        let _ = Fail(outputType: Int.self, failure: CustomError.someError)
+        Fail(outputType: Int.self, failure: CustomError.someError)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -30,6 +31,7 @@ struct FailTests {
             } receiveValue: { _ in
                 logger.log(3)
             }
+            .store(in: &cancellables)
 
         #expect(logger.result() == [2])
     }

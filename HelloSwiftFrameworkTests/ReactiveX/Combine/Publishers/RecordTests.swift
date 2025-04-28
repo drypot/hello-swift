@@ -14,10 +14,11 @@ struct RecordTests {
 
     @Test func testRecord() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // Record 는 이미 만들어져 있는 데이터를 publish 한다.
 
-        let _ = Record<Int, Never>(output: [1, 2, 3, 4, 5], completion: .finished)
+        Record<Int, Never>(output: [1, 2, 3, 4, 5], completion: .finished)
             .sink(
                 receiveCompletion: { completion in
                     logger.log(99)
@@ -26,12 +27,14 @@ struct RecordTests {
                     logger.log(value)
                 }
             )
+            .store(in: &cancellables)
 
         #expect(logger.result() == [1, 2, 3, 4, 5, 99])
     }
 
     @Test func testRecording() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // 여타 이벤트로 발생하는 값들을 publish 할 수 있다.
         // Record.init 에 바로 sink 를 붙여도 되고,
@@ -45,25 +48,27 @@ struct RecordTests {
             recording.receive(completion: .finished)
         }
 
-        let _ = Record<Int, Never>(recording: record.recording)
-        .sink(
-            receiveCompletion: { completion in
-                logger.log(99)
-            },
-            receiveValue: { value in
-                logger.log(value)
-            }
-        )
+        Record<Int, Never>(recording: record.recording)
+            .sink(
+                receiveCompletion: { completion in
+                    logger.log(99)
+                },
+                receiveValue: { value in
+                    logger.log(value)
+                }
+            )
+            .store(in: &cancellables)
 
-        let _ = Record<Int, Never>(recording: record.recording)
-        .sink(
-            receiveCompletion: { completion in
-                logger.log(99)
-            },
-            receiveValue: { value in
-                logger.log(value)
-            }
-        )
+        Record<Int, Never>(recording: record.recording)
+            .sink(
+                receiveCompletion: { completion in
+                    logger.log(99)
+                },
+                receiveValue: { value in
+                    logger.log(value)
+                }
+            )
+            .store(in: &cancellables)
 
         #expect(logger.result() == [1, 2, 3, 4, 5, 99, 1, 2, 3, 4, 5, 99])
     }

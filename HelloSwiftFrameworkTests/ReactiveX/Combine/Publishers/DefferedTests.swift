@@ -14,15 +14,17 @@ struct DefferedTests {
 
     @Test func testDeffered() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // Subscriber 가 붙으면 Publisher 를 생성한다.
 
-        let _ = Deferred {
+        Deferred {
             return Just(42)
         }
         .sink { value in
             logger.log(value)
         }
+        .store(in: &cancellables)
 
         #expect(logger.result() == [42])
     }

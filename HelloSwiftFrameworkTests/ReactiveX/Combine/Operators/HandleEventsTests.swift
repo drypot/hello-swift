@@ -16,9 +16,9 @@ struct HandleEventsTests {
 
     @Test func test() throws {
         let logger = SimpleLogger<String>()
+        var cancellables = Set<AnyCancellable>()
 
-        let _ = Just("value")
-
+        Just("value")
             .handleEvents(receiveSubscription: { _ in
                 logger.log("receiveSubscription")
             }, receiveOutput: { _ in
@@ -30,13 +30,13 @@ struct HandleEventsTests {
             }, receiveRequest: { _ in
                 logger.log("receiveRequest")
             })
-
             .sink { completion in
                 logger.log("sink completion")
             } receiveValue: { value in
                 logger.log("sink value")
             }
-
+            .store(in: &cancellables)
+        
         logger.log("end")
 
         #expect(logger.result() == [

@@ -14,6 +14,7 @@ struct FutureTests {
 
     @Test func testFuture() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // Future 는 클로져를 인자로 받는데 이 클로져는 promise 펑션을 인자로 받는다.
         // promise 펑션은 Result 타입을 인자로 받는다.
@@ -30,15 +31,18 @@ struct FutureTests {
 
         logger.log(20)
 
-        let _ = future.sink { value in
-            logger.log(value)
-        }
+        future
+            .sink { value in
+                logger.log(value)
+            }
+            .store(in: &cancellables)
 
         #expect(logger.result() == [10, 20, 99])
     }
 
     @Test func testDeferredFuture() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // Future 는 인자로 받은 closure 를 subscriber 를 기다리지 않고 바로 실행해 버린다.
         // 해서 subscriber 를 기다리려면 Deferred 로 감싸야 한다.
@@ -52,9 +56,11 @@ struct FutureTests {
 
         logger.log(20)
 
-        let _ = future.sink { value in
-            logger.log(value)
-        }
+        future
+            .sink { value in
+                logger.log(value)
+            }
+            .store(in: &cancellables)
 
         #expect(logger.result() == [20, 10, 99])
     }

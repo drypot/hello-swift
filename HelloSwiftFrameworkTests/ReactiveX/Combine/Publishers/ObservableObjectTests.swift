@@ -16,6 +16,7 @@ struct ObservableObjectTests {
 
     @Test func testObjectWillChange() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         // An ObservableObject synthesizes an objectWillChange publisher
         // that emits the changed value before any of its @Published properties changes.
@@ -31,7 +32,6 @@ struct ObservableObjectTests {
         }
 
         let john = Contact(name: "John Appleseed", age: 24)
-        var cancellables = Set<AnyCancellable>()
 
         john.objectWillChange
             .sink { _ in

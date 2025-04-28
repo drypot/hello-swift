@@ -14,11 +14,13 @@ struct EmptyTests {
 
     @Test func testEmpty() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
-        let _ = Empty()
+        Empty()
             .sink { value in
                 logger.log(value)
             }
+            .store(in: &cancellables)
 
         #expect(logger.result() == [])
     }

@@ -18,11 +18,13 @@ struct SubscribeOnTests {
     // redeive(on: DispatchQueue.main)
     // 조합을 사용한다.
 
+    nonisolated(unsafe) static var cancellables = Set<AnyCancellable>()
+
     @Test func test() async throws {
         let logger = SimpleLogger<String>()
 
         await withCheckedContinuation { continuation in
-            let _ = Just("good day")
+            Just("good day")
                 .handleEvents(
                     receiveRequest: { _ in
                         logger.log(Thread.isMainThread ?
@@ -43,6 +45,7 @@ struct SubscribeOnTests {
                     logger.log($0)
                     continuation.resume()
                 }
+                .store(in: &SubscribeOnTests.cancellables)
         }
 
         #expect(

@@ -14,6 +14,7 @@ struct PublishedTests {
 
     @Test func testPublished() throws {
         let logger = SimpleLogger<Int>()
+        var cancellables = Set<AnyCancellable>()
 
         class Weather {
             @Published var temperature: Int
@@ -24,7 +25,6 @@ struct PublishedTests {
         }
 
         let weather = Weather(temperature: 10)
-        var cancellables = Set<AnyCancellable>()
 
         weather.$temperature
             .sink {
